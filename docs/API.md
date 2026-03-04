@@ -279,19 +279,151 @@ When the Tome that created the Page is destroyed, the Page will also destroy; cl
 Attaches the Tome to one of the few object types. Once attached, when either triggers are fired, the Tome will destroy itself.
 
 !!! important ""
-	Attachments are not cleaned up when the Tome is destroyed. In the case of a Signal being fired multiple times, the Tome will be destroyed multiple times.
+	Attachments are not cleaned up when the Tome is destroyed. For example, if a Signal is provided, and the Signal gets fired n times, the Tome will also be destroyed n times until the Signal is either destroyed, or the attachment is unattached.
 
-```luau linenums="1" hl_lines="3-4"
-local newTome: Tome.Tome = Tome.new()
+	It's also important to note that if an Instance that doesn't have a parent is attached, no attachment will be made and nothing is returned.
 
-local part: BasePart = workspace.Part
-newTome:Attach(newTome)
+=== "Basic Example"
+	```luau linenums="1" hl_lines="3-4"
+	local newTome: Tome.Tome = Tome.new()
 
-newTome:Add(function()
-	print("Tome has been destroyed")
-end)
+	local part: BasePart = workspace.Part
+	newTome:Attach(newTome)
 
-part:Destroy() -- destroying the part will now destroy the Tome
-```
+	newTome:Add(function()
+		print("Tome has been destroyed")
+	end)
+
+	part:Destroy() -- destroying the part will now destroy the Tome
+	```
+
+=== "Attachment Clean-up Example"
+	In this example, an attachment is stored in the variable `attachmentCleanup`. This attachment can be "cleaned up" at any time, and once cleaned, will prevent the object from invoking `#!luau Tome:Destroy` again.
+	```luau linenums="1" hl_lines="8-8"
+	local newTome: Tome.Tome = Tome.new()
+	
+	newTome:OnDestroy(function()
+		print("Tome destroyed")
+	end)
+	
+	local signal: Signal.Signal = Signal.new()
+	local attachmentCleanup: Tome.Attachment? = newTome:Attach(signal) -- attach the Signal
+	
+	signal:Fire() --> "Tome destroyed (1x)"
+	signal:Fire() --> "Tome destroyed (2x)"
+	signal:Fire() --> "Tome destroyed (3x)"
+	
+	if type(attachmentCleanup) == "table" then
+		attachmentCleanup:Disconnect() -- disconnect the attachment
+	end
+	
+	signal:Fire() --> nothing happens
+	```
 
 ---
+
+### `#!luau Tome:AttachTuple`
+
+!!! info "Arguments"
+	1. `#!luau Tuple: ...(Tome | Instance | RBXScriptSignal | {Connect: () -> ()})` &mdash; The tuple of objects that the Tome will attach to.
+
+!!! tip "Returns"
+	1. `#!luau cleanUp: () -> ()` &mdash; The clean up function.
+	2. `#!luau attachments: {Attachment}` &mdash; The array of attachments (shouldn't be mutated)
+
+Works just like `#!luau Tome:Attach` however any amount of objects can be provided, and once all the objects are successfully connected, a single clean up function is returned, which when called, will free all the attachments at once.
+
+!!! important ""
+	It's important to note that this method internally calls `#!luau Tome:Attach`. The same warning(s) apply from `#!luau Tome:Attach`, to here.
+
+=== "Basic Example"
+	```luau linenums="1" hl_lines="9-9"
+	local newTome: Tome.Tome = Tome.new()
+	newTome:OnDestroy(function()
+		print("Tome destroyed")
+	end)
+
+	local part: BasePart = workspace.Part
+	local part2: BasePart = workspace.Part2
+
+	local cleanUp: () -> () = newTome:AttachTuple(part, part2)
+
+	part:Destroy() --> "Tome destroyed (1x)"
+	part2:Destroy() --> "Tome destroyed (2x)"
+	```
+
+=== "Extended Example"
+	```luau linenums="1" hl_lines="10-10"
+	local newTome: Tome.Tome = Tome.new()
+	newTome:OnDestroy(function()
+		print("Tome destroyed")
+	end)
+	
+	local part: BasePart = workspace.Part
+	local part2: BasePart = workspace.Part2
+	local part3: BasePart = workspace.Part3
+	
+	local cleanUp: () -> () = newTome:AttachTuple(part, part2, part3)
+	
+	part:Destroy() --> "Tome destroyed (1x)"
+	part2:Destroy() --> "Tome destroyed (2x)"
+	
+	cleanUp()
+	
+	part3:Destroy() --> nothing happens
+	```
+	
+---
+
+### `#!luau Tome:BindRenderStepped`
+
+!!! info "Arguments"
+	1. `#!luau name: string` &mdash; The name of the render step binding.
+	2. `#!luau renderPriority: number` &mdash; The name of the render step binding.
+	3. `#!luau listener: (deltaTime: number) -> ()` &mdash; The name of the render step binding.
+
+!!! tip "Returns"
+	1. `#!luau unbind: () -> ()` &mdash; The unbind function (manual clean up)
+
+Calls the [`#!luau RunService:BindToRenderStep`](https://create.roblox.com/docs/reference/engine/classes/RunService#BindToRenderStep) method. Tome adds a function inside of itself to unbind the render binding once the Tome is destroyed.
+
+Optionally you can call the `#!luau unbind()` function returned to manually clean up the binding.
+
+=== "Basic Example"
+	In this example, the binding will output the delta time each frame until 2 seconds have elapsed.
+	```luau linenums="1" hl_lines="3-5"
+	local newTome: Tome.Tome = Tome.new()
+	
+	local cleanUp: Tome.CallableRenderStepBinding = newTome:BindRenderStepped("test-binding", 201, function(deltaTime: number)
+		print(deltaTime)
+	end)
+	
+	task.wait(2)
+	
+	cleanUp()
+	```
+	
+---
+
+### `#!luau Tome:CanDestroy`
+
+!!! tip "Returns"
+	1. `#!luau canDestroy: boolean` &mdash; Whether the Tome can be destroyed at this moment in time.
+
+Returns whether the Tome can be destroyed in this current moment of time. You only need to call this before using methods that throw an error when attempting to mutate the Tome during its destroy life cycle.
+
+=== "Basic Example"
+	In this example, the Tome is running with `#!luau SpawnDestroy = false`, hence the `#!luau task.defer`. Adding a yielding function will temporarily halt the destroy thread, keeping the Tome in a destroying state.
+	```luau linenums="1" hl_lines="4-4"
+	local newTome: Tome.Tome = Tome.new()
+	
+	task.defer(function()
+		print(newTome:CanDestroy())
+	end)
+	
+	newTome:Add(function()
+		task.wait(2)
+	end)
+	
+	newTome:Destroy()
+	```
