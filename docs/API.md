@@ -427,3 +427,192 @@ Returns whether the Tome can be destroyed in this current moment of time. You on
 	
 	newTome:Destroy()
 	```
+
+---
+
+### `#!luau Tome:Clone`
+
+!!! info "Arguments"
+	1. `#!luau object: any` &mdash; The object to clone
+	2. `#!luau extendFunctionName: string?` &mdash; The method to call on the object to clone it.
+
+!!! tip "Returns"
+	1. `#!luau clonedObject: any` &mdash; The cloned object.
+
+Clones the provided object using the `#!luau object:Clone()` as the clone method (unless overridden by the 2nd argument)
+
+=== "Basic Example"
+	```luau linenums="1" hl_lines="3-3"
+	local newTome: Tome.Tome = Tome.new()
+	
+	local clonedPart: BasePart = newTome:Clone(workspace.Part)
+	
+	newTome:Destroy() -- Destroys the cloned part
+	```
+	
+---
+
+### `#!luau Tome:Connect`
+
+!!! info "Arguments"
+	1. `#!luau Signal: Signal` &mdash; The Signal to connect to.
+	2. `#!luau listener: (...any) -> ()` &mdash; The listener function to connect with.
+
+!!! tip "Returns"
+	1. `#!luau Connection: {Disconnect: () -> ()} | RBXScriptConnection` &mdash; The Connection object.
+
+Connects to a Signal, and adding it into the Tome. Can be a custom-made Signal or an RBXScriptSignal.
+
+=== "Basic Example"
+	```luau linenums="1" hl_lines="3-5"
+	local newTome: Tome.Tome = Tome.new()
+	
+	newTome:Connect(workspace.ChildAdded, function(child: Instance)
+		print(child:GetFullName())
+	end)
+	```
+	
+---
+
+### `#!luau Tome:Once`
+
+!!! info "Arguments"
+	1. `#!luau Signal: Signal` &mdash; The Signal to connect to.
+	2. `#!luau listener: (...any) -> ()` &mdash; The listener function to connect with.
+
+!!! tip "Returns"
+	1. `#!luau Connection: {Disconnect: () -> ()} | RBXScriptConnection` &mdash; The Connection object.
+
+Works exactly the same as `#!luau Tome:Connect`, however only connecting to a Signal once, and adding it into the Tome. Can be a custom-made Signal or an RBXScriptSignal.
+
+=== "Basic Example"
+	```luau linenums="1" hl_lines="3-5"
+	local newTome: Tome.Tome = Tome.new()
+	
+	newTome:Once(workspace.ChildAdded, function(child: Instance)
+		print(child:GetFullName())
+	end)
+	```
+	
+---
+
+### `#!luau Tome:Construct`
+
+!!! info "Arguments"
+	1. `#!luau class: {new: () -> ()} | () -> ()` &mdash; The class to construct.
+	2. `#!luau Tuple: ...any` &mdash; The arguments to pass into the constructor.
+
+!!! tip "Returns"
+	1. `#!luau Class: any` &mdash; The constructed class.
+
+Constructs a class containing a `#!luau Class.new()` constructor function. Optionally you can pass in the constructor function if your class uses another name for construction.
+
+Any amount of arguments can be passed in after the class/constructor, which will be passed into it. After construction, the class object is added into the Tome.
+
+=== "Basic Example"
+	```luau linenums="1" hl_lines="10-10"
+	local newTome: Tome.Tome = Tome.new()
+	
+	-- simulate a custom class
+	local Class = {
+		new = function()
+			return {}
+		end,
+	}
+	
+	local newClass: any = newTome:Construct(Class)
+	```
+	
+=== "Extended Example"
+	```luau linenums="1" hl_lines="13-13"
+	local newTome: Tome.Tome = Tome.new()
+	
+	-- simulate a custom class
+	local Class = {
+		create = function(name: string, health: number)
+			return {
+				name = name,
+				health = health,
+			}
+		end,
+	}
+	
+	local newClass: any = newTome:Construct(Class.create, "Tea", 100)
+	```
+	
+---
+
+### `#!luau Tome:Delay`
+
+!!! info "Arguments"
+	1. `#!luau duration: number` &mdash; The amount of time to delay.
+	2. `#!luau listener: (...any) -> ...any` &mdash; The listener function to call after the delay.
+	3. `#!luau Tuple: ...any` &mdash; The params to pass into the listener.
+
+!!! tip "Returns"
+	1. `#!luau thread: thread` &mdash; The delayed thread.
+
+Calls `#!luau task.delay`, adds the delayed thread into the Tome, and returns it.
+
+=== "Basic Example"
+	```luau linenums="1" hl_lines="3-5"
+	local newTome: Tome.Tome = Tome.new()
+	
+	newTome:Delay(2.0, function()
+		print("Prints after 2 seconds")
+	end)
+	```
+	
+=== "Extended Example"
+	```luau linenums="1" hl_lines="3-5"
+	local newTome: Tome.Tome = Tome.new()
+	
+	newTome:Delay(2.0, function(argument: number)
+		print("The argument passed: ", argument)
+	end, 25)
+	```
+	
+---
+
+### `#!luau Tome:extend`
+
+Duplicate of `#!luau Tome:AddPage`
+
+---
+
+### `#!luau Tome:Extend`
+
+Duplicate of `#!luau Tome:AddPage`
+
+---
+
+### `#!luau Tome:Spawn`
+
+!!! info "Arguments"
+	1. `#!luau listener: (...any) -> ...any` &mdash; The listener function to call after the delay.
+	2. `#!luau Tuple: ...any` &mdash; The params to pass into the listener.
+	
+!!! tip "Returns"
+	1. `#!luau thread: thread` &mdash; The spawned thread.
+
+Calls `#!luau task.spawn`, adds the spawned thread into the Tome, and returns it.
+
+=== "Basic Example"
+	```luau linenums="1" hl_lines="3-5"
+	local newTome: Tome.Tome = Tome.new()
+	
+	newTome:Spawn(function()
+		print("Running in a spawned thread")
+	end)
+	```
+	
+=== "Extended Example"
+	```luau linenums="1" hl_lines="3-5"
+	local newTome: Tome.Tome = Tome.new()
+	
+	newTome:Spawn(function(argument: number)
+		print("The argument passed: ", argument)
+	end, 25)
+	```
+	
+---
