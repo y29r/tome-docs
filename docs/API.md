@@ -705,30 +705,29 @@ Internally calls `#!luau Tome:DestroyAllObjects` and `#!luau Tome:DestroyAllPage
 ### `#!luau Tome:DestroyAllObjects`
 
 !!! info "Arguments"
-	1. `#!luau Tuple: ...any` &mdash; Any amount of params to pass into the `#!luau Tome:OnDestroy` callbacks.
+	1. `#!luau __ignoreDestroyingProperty: boolean?` &mdash; Internal argument to skip over checking whether the Tome is currently destroying.
 
-Internally calls `#!luau Tome:DestroyAllObjects` and `#!luau Tome:DestroyAllPages`. During both states of destruction, the Tome will enter a destroying state, where most attempts at mutation e.g. `#!luau Tome:Add` will throw an error. This state is usually very short lived (<0.00001s)
+Destroys all the objects inside the Tome. Doesn't destroy Pages.
 
 === "Basic Example"
-	```luau linenums="1" hl_lines="7-7"
+	```luau linenums="1" hl_lines="5-5"
 	local newTome: Tome.Tome = Tome.new()
 	
-	newTome:Add(function()
-		print("Tome destroyed")
-	end)
+	newTome:Add(workspace.Part)
 	
-	newTome:Destroy()
+	newTome:DestroyAllObjects() --> destroys the part
 	```
 	
 === "Extended Example"
-	```luau linenums="1" hl_lines="7-7"
+	```luau linenums="1" hl_lines="5-5"
 	local newTome: Tome.Tome = Tome.new()
 	
-	newTome:OnDestroy(function(argument: string)
-		print(argument)
-	end)
+	newTome:Add(workspace.Part)
 	
-	newTome:Destroy("Hello, world")
+	local newPage: Tome.Tome = newTome:AddPage("Test")
+	newPage:Add(workspace.Part2)
+	
+	newTome:DestroyAllObjects() --> destroys only part 1, and doesn't destroy the Page
 	```
 	
 ---
