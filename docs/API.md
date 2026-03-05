@@ -798,3 +798,22 @@ Destroys the given object(s), only if they exist inside the Tome. Destroying the
 	```
 	
 ---
+
+### `#!luau Tome:DestroyObjectsWithTag`
+
+!!! info "Arguments"
+	1. `#!luau tag: string` &mdash; The tag to use when querying Tome.
+
+Destroys all objects with the given tag. This only works for Instances and the objects must be inside the Tome to be destroyed.
+
+=== "Basic Example"
+	```luau linenums="1" hl_lines="6-6"
+	local newTome: Tome.Tome = Tome.new()
+	
+	local part: BasePart = newPage:AddTuple(workspace.Part)
+	part:AddTag("Test")
+	
+	newTome:DestroyObjectsWithTag("Test") --> destroys "part"
+	```
+	
+---
