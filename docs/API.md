@@ -780,3 +780,21 @@ Destroys the given object, only if it exists inside the Tome. Destroying it will
 	```
 	
 ---
+
+### `#!luau Tome:DestroyTuple`
+
+!!! info "Arguments"
+	1. `#!luau Tuple: ...any` &mdash; Any amount of objects to destroy.
+
+Destroys the given object(s), only if they exist inside the Tome. Destroying them will remove them from the Tome as well.
+
+=== "Basic Example"
+	```luau linenums="1" hl_lines="5-5"
+	local newTome: Tome.Tome = Tome.new()
+	
+	local part: BasePart, part2: BasePart = newPage:AddTuple(workspace.Part, workspace.Part2)
+	
+	newTome:DestroyTuple(part, part2) --> destroys "part" and "part2"
+	```
+	
+---
