@@ -817,3 +817,33 @@ Destroys all objects with the given tag. This only works for Instances and the o
 	```
 	
 ---
+
+### `#!luau Tome:DestroyObjectsOfType`
+
+!!! info "Arguments"
+	1. `#!luau typeName: string` &mdash; The type of object(s) to destroy.
+
+Destroys all objects that match the provided type. During querying Tome will search for the following in these types of objects:
+- Instance: `#!luau Instance:IsA(type)`
+- table: `#!luau table.__type == type`
+
+=== "Basic Example"
+	```luau linenums="1" hl_lines="5-5"
+	local newTome: Tome.Tome = Tome.new()
+	
+	local part: BasePart = newPage:Add(workspace.Part)
+	
+	newTome:DestroyObjectsOfType("BasePart") --> destroys "part"
+	```
+
+=== "Extended Example"
+	```luau linenums="1" hl_lines="6-6"
+	local newTome: Tome.Tome = Tome.new()
+	
+	local part: BasePart = newPage:Add(workspace.Part)
+	local signal: Signal.Signal = newTome:Signal()
+	
+	newTome:DestroyObjectsOfType("Signal") --> destroys only "signal"
+	```
+
+---
