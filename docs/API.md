@@ -719,7 +719,7 @@ Destroys all the objects inside the Tome. Doesn't destroy Pages.
 	```
 	
 === "Extended Example"
-	```luau linenums="1" hl_lines="5-5"
+	```luau linenums="1" hl_lines="8-8"
 	local newTome: Tome.Tome = Tome.new()
 	
 	newTome:Add(workspace.Part)
@@ -728,6 +728,37 @@ Destroys all the objects inside the Tome. Doesn't destroy Pages.
 	newPage:Add(workspace.Part2)
 	
 	newTome:DestroyAllObjects() --> destroys only part 1, and doesn't destroy the Page
+	```
+	
+---
+
+### `#!luau Tome:DestroyAllPages`
+
+!!! info "Arguments"
+	1. `#!luau __ignoreDestroyingProperty: boolean?` &mdash; Internal argument to skip over checking whether the Tome is currently destroying.
+
+Destroys all the Pages inside the Tome. Doesn't destroy objects.
+
+=== "Basic Example"
+	```luau linenums="1" hl_lines="6-6"
+	local newTome: Tome.Tome = Tome.new()
+	
+	local newPage: Tome.Tome = newTome:AddPage("Test")
+	newPage:Add(workspace.Part)
+	
+	newTome:DestroyAllPages() --> destroys the Page "test" along with the part
+	```
+	
+=== "Extended Example"
+	```luau linenums="1" hl_lines="8-8"
+	local newTome: Tome.Tome = Tome.new()
+	
+	newTome:Add(workspace.Part)
+	
+	local newPage: Tome.Tome = newTome:AddPage("Test")
+	newPage:Add(workspace.Part2)
+	
+	newTome:DestroyAllPages() --> destroys only the Page "test" alongside part 2
 	```
 	
 ---
