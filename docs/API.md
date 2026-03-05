@@ -589,7 +589,7 @@ Duplicate of `#!luau Tome:AddPage`
 ### `#!luau Tome:Spawn`
 
 !!! info "Arguments"
-	1. `#!luau listener: (...any) -> ...any` &mdash; The listener function to call after the delay.
+	1. `#!luau listener: (...any) -> ...any` &mdash; The listener function to call when spawning.
 	2. `#!luau Tuple: ...any` &mdash; The params to pass into the listener.
 	
 !!! tip "Returns"
@@ -613,6 +613,122 @@ Calls `#!luau task.spawn`, adds the spawned thread into the Tome, and returns it
 	newTome:Spawn(function(argument: number)
 		print("The argument passed: ", argument)
 	end, 25)
+	```
+	
+---
+
+### `#!luau Tome:Defer`
+
+!!! info "Arguments"
+	1. `#!luau listener: (...any) -> ...any` &mdash; The listener function to call after the defer.
+	2. `#!luau Tuple: ...any` &mdash; The params to pass into the listener.
+	
+!!! tip "Returns"
+	1. `#!luau thread: thread` &mdash; The deferred thread.
+
+Calls `#!luau task.defer`, adds the deferred thread into the Tome, and returns it.
+
+=== "Basic Example"
+	```luau linenums="1" hl_lines="3-5"
+	local newTome: Tome.Tome = Tome.new()
+	
+	newTome:Defer(function()
+		print("Running in a spawned thread")
+	end)
+	```
+	
+=== "Extended Example"
+	```luau linenums="1" hl_lines="3-5"
+	local newTome: Tome.Tome = Tome.new()
+	
+	newTome:Defer(function(argument: number)
+		print("The argument passed: ", argument)
+	end, 25)
+	```
+	
+---
+
+### `#!luau Tome:DelayDestroy`
+
+!!! info "Arguments"
+	1. `#!luau duration: number` &mdash; The amount of time (in seconds) to delay the destroy.
+	
+!!! tip "Returns"
+	1. `#!luau thread: thread` &mdash; The thread responsible for destroying the Tome.
+
+Calls `#!luau task.delay`, with the 1st argument being `'duration'`. Once that time has elapsed successfully, the thread will call `#!luau Tome:Destroy` internally.
+
+=== "Basic Example"
+	```luau linenums="1" hl_lines="7-7"
+	local newTome: Tome.Tome = Tome.new()
+	
+	newTome:Add(function()
+		print("Tome destroyed")
+	end)
+	
+	newTome:DelayDestroy(2.0)
+	```
+	
+---
+
+### `#!luau Tome:Destroy`
+
+!!! info "Arguments"
+	1. `#!luau Tuple: ...any` &mdash; Any amount of params to pass into the `#!luau Tome:OnDestroy` callbacks.
+
+Internally calls `#!luau Tome:DestroyAllObjects` and `#!luau Tome:DestroyAllPages`. During both states of destruction, the Tome will enter a destroying state, where most attempts at mutation e.g. `#!luau Tome:Add` will throw an error. This state is usually very short lived (<0.00001s)
+
+=== "Basic Example"
+	```luau linenums="1" hl_lines="7-7"
+	local newTome: Tome.Tome = Tome.new()
+	
+	newTome:Add(function()
+		print("Tome destroyed")
+	end)
+	
+	newTome:Destroy()
+	```
+	
+=== "Extended Example"
+	```luau linenums="1" hl_lines="7-7"
+	local newTome: Tome.Tome = Tome.new()
+	
+	newTome:OnDestroy(function(argument: string)
+		print(argument)
+	end)
+	
+	newTome:Destroy("Hello, world")
+	```
+	
+---
+
+### `#!luau Tome:DestroyAllObjects`
+
+!!! info "Arguments"
+	1. `#!luau Tuple: ...any` &mdash; Any amount of params to pass into the `#!luau Tome:OnDestroy` callbacks.
+
+Internally calls `#!luau Tome:DestroyAllObjects` and `#!luau Tome:DestroyAllPages`. During both states of destruction, the Tome will enter a destroying state, where most attempts at mutation e.g. `#!luau Tome:Add` will throw an error. This state is usually very short lived (<0.00001s)
+
+=== "Basic Example"
+	```luau linenums="1" hl_lines="7-7"
+	local newTome: Tome.Tome = Tome.new()
+	
+	newTome:Add(function()
+		print("Tome destroyed")
+	end)
+	
+	newTome:Destroy()
+	```
+	
+=== "Extended Example"
+	```luau linenums="1" hl_lines="7-7"
+	local newTome: Tome.Tome = Tome.new()
+	
+	newTome:OnDestroy(function(argument: string)
+		print(argument)
+	end)
+	
+	newTome:Destroy("Hello, world")
 	```
 	
 ---
