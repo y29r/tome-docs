@@ -762,3 +762,21 @@ Destroys all the Pages inside the Tome. Doesn't destroy objects.
 	```
 	
 ---
+
+### `#!luau Tome:DestroyObject`
+
+!!! info "Arguments"
+	1. `#!luau object: any` &mdash; The object to destroy.
+
+Destroys the given object, only if it exists inside the Tome. Destroying it will remove it from the Tome as well.
+
+=== "Basic Example"
+	```luau linenums="1" hl_lines="5-5"
+	local newTome: Tome.Tome = Tome.new()
+	
+	local part: BasePart = newPage:Add(workspace.Part)
+	
+	newTome:DestroyObject(part) --> destroys the part
+	```
+	
+---
