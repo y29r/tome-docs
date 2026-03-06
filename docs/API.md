@@ -875,3 +875,31 @@ Returns whether the provided object exists inside the Tome
 	```
 
 ---
+
+### `#!luau Tome:Has`
+
+!!! info "Arguments"
+	1. `#!luau object: any` &mdash; The object to check.
+	
+!!! tip "Returns"
+	1. `#!luau exists: boolean` &mdash; Whether the object exists.
+
+The exact same as `#!luau Tome:Contains`.
+
+=== "Basic Example"
+	```luau linenums="1" hl_lines="5-5"
+	local newTome: Tome.Tome = Tome.new()
+	
+	local part: BasePart = newPage:Add(workspace.Part)
+	
+	print(newTome:Has(part)) --> true
+	```
+
+=== "Extended Example"
+	```luau linenums="1" hl_lines="3-3"
+	local newTome: Tome.Tome = Tome.new()
+	
+	print(newTome:Has(workspace.Part2)) --> false
+	```
+
+---
