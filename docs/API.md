@@ -903,3 +903,28 @@ The exact same as `#!luau Tome:Contains`.
 	```
 
 ---
+
+### `#!luau Tome:FromExisting`
+
+!!! info "Arguments"
+	1. `#!luau instance: Instance` &mdash; The object to Instance against.
+	2. `#!luau destroyMethod: DestroyMethod?` &mdash; An optional override for the destroy method to use.
+	
+!!! tip "Returns"
+	1. `#!luau object: Instance` &mdash; The instantiated instance created from the 1st argument.
+
+Creates an Instance from an existing one. See [this page](https://create.roblox.com/docs/reference/engine/datatypes/Instance#fromExisting) for more information.
+
+If the Instance is created successfully, the Instance will be added into the Tome.
+
+=== "Basic Example"
+	```luau linenums="1" hl_lines="3-3"
+	local newTome: Tome.Tome = Tome.new()
+	
+	local part: BasePart = newPage:FromExisting(workspace.Part) -- creates a clone
+	part.Parent = workspace
+	
+	newTome:Destroy()
+	```
+
+---
