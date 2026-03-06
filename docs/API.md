@@ -774,7 +774,7 @@ Destroys the given object, only if it exists inside the Tome. Destroying it will
 	```luau linenums="1" hl_lines="5-5"
 	local newTome: Tome.Tome = Tome.new()
 	
-	local part: BasePart = newPage:Add(workspace.Part)
+	local part: BasePart = newTome:Add(workspace.Part)
 	
 	newTome:DestroyObject(part) --> destroys the part
 	```
@@ -792,7 +792,7 @@ Destroys the given object(s), only if they exist inside the Tome. Destroying the
 	```luau linenums="1" hl_lines="5-5"
 	local newTome: Tome.Tome = Tome.new()
 	
-	local part: BasePart, part2: BasePart = newPage:AddTuple(workspace.Part, workspace.Part2)
+	local part: BasePart, part2: BasePart = newTome:AddTuple(workspace.Part, workspace.Part2)
 	
 	newTome:DestroyTuple(part, part2) --> destroys "part" and "part2"
 	```
@@ -810,7 +810,7 @@ Destroys all objects with the given tag. This only works for Instances and the o
 	```luau linenums="1" hl_lines="6-6"
 	local newTome: Tome.Tome = Tome.new()
 	
-	local part: BasePart = newPage:AddTuple(workspace.Part)
+	local part: BasePart = newTome:AddTuple(workspace.Part)
 	part:AddTag("Test")
 	
 	newTome:DestroyObjectsWithTag("Test") --> destroys "part"
@@ -831,7 +831,7 @@ Destroys all objects that match the provided type. During querying Tome will sea
 	```luau linenums="1" hl_lines="5-5"
 	local newTome: Tome.Tome = Tome.new()
 	
-	local part: BasePart = newPage:Add(workspace.Part)
+	local part: BasePart = newTome:Add(workspace.Part)
 	
 	newTome:DestroyObjectsOfType("BasePart") --> destroys "part"
 	```
@@ -840,7 +840,7 @@ Destroys all objects that match the provided type. During querying Tome will sea
 	```luau linenums="1" hl_lines="6-6"
 	local newTome: Tome.Tome = Tome.new()
 	
-	local part: BasePart = newPage:Add(workspace.Part)
+	local part: BasePart = newTome:Add(workspace.Part)
 	local signal: Signal.Signal = newTome:Signal()
 	
 	newTome:DestroyObjectsOfType("Signal") --> destroys only "signal"
@@ -862,7 +862,7 @@ Returns whether the provided object exists inside the Tome
 	```luau linenums="1" hl_lines="5-5"
 	local newTome: Tome.Tome = Tome.new()
 	
-	local part: BasePart = newPage:Add(workspace.Part)
+	local part: BasePart = newTome:Add(workspace.Part)
 	
 	print(newTome:Contains(part)) --> true
 	```
@@ -890,7 +890,7 @@ The exact same as `#!luau Tome:Contains`.
 	```luau linenums="1" hl_lines="5-5"
 	local newTome: Tome.Tome = Tome.new()
 	
-	local part: BasePart = newPage:Add(workspace.Part)
+	local part: BasePart = newTome:Add(workspace.Part)
 	
 	print(newTome:Has(part)) --> true
 	```
@@ -921,10 +921,37 @@ If the Instance is created successfully, the Instance will be added into the Tom
 	```luau linenums="1" hl_lines="3-3"
 	local newTome: Tome.Tome = Tome.new()
 	
-	local part: BasePart = newPage:FromExisting(workspace.Part) -- creates a clone
+	local part: BasePart = newTome:FromExisting(workspace.Part) -- creates a clone
 	part.Parent = workspace
 	
 	newTome:Destroy()
+	```
+
+---
+
+### `#!luau Tome:GetObjects`
+
+!!! tip "Returns"
+	1. `#!luau objects: {[any]: DestroyMethod}` &mdash; The objects.
+
+Returns the internal dictionary Tome uses to store objects. This table shouldn't be mutated freely, but if you know what you're doing, feel free.
+
+=== "Basic Example"
+	```luau linenums="1" hl_lines="5-5"
+	local newTome: Tome.Tome = Tome.new()
+	
+	newTome:Add(workspace.Part)
+	
+	print(newTome:GetObjects()) --> {[Instance(Part,FFFFF)] = "Destroy"}
+	```
+
+=== "Extended Example"
+	```luau linenums="1" hl_lines="3-5"
+	local newTome: Tome.Tome = Tome.new()
+	
+	local objects: {[any]: Tome.DestroyMethod} = newTome:GetObjects()
+	
+	objects[workspace.Part] = "Destroy"
 	```
 
 ---
