@@ -824,8 +824,8 @@ Destroys all objects with the given tag. This only works for Instances and the o
 	1. `#!luau typeName: string` &mdash; The type of object(s) to destroy.
 
 Destroys all objects that match the provided type. During querying Tome will search for the following in these types of objects:
-- Instance: `#!luau Instance:IsA(type)`
-- table: `#!luau table.__type == type`
+	- Instance: `#!luau Instance:IsA(type)`
+	- table: `#!luau table.__type == type`
 
 === "Basic Example"
 	```luau linenums="1" hl_lines="5-5"
