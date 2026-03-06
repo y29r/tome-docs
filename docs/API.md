@@ -847,3 +847,31 @@ Destroys all objects that match the provided type. During querying Tome will sea
 	```
 
 ---
+
+### `#!luau Tome:Contains`
+
+!!! info "Arguments"
+	1. `#!luau object: any` &mdash; The object to check.
+	
+!!! tip "Returns"
+	1. `#!luau exists: boolean` &mdash; Whether the object exists.
+
+Returns whether the provided object exists inside the Tome
+
+=== "Basic Example"
+	```luau linenums="1" hl_lines="5-5"
+	local newTome: Tome.Tome = Tome.new()
+	
+	local part: BasePart = newPage:Add(workspace.Part)
+	
+	print(newTome:Contains(part)) --> true
+	```
+
+=== "Extended Example"
+	```luau linenums="1" hl_lines="3-3"
+	local newTome: Tome.Tome = Tome.new()
+	
+	print(newTome:Contains(workspace.Part2)) --> false
+	```
+
+---
