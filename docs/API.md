@@ -957,3 +957,25 @@ Returns the internal dictionary Tome uses to store objects. This table shouldn't
 	```
 
 ---
+
+### `#!luau Tome:GetObjectsWithTag`
+
+!!! info "Arguments"
+	1. `#!luau tag: string` &mdash; The tag to use.
+
+!!! tip "Returns"
+	1. `#!luau objects: {[any]: DestroyMethod}` &mdash; The tagged objects.
+
+Returns objects that have the provided tag. Only works for Instances
+
+=== "Basic Example"
+	```luau linenums="1" hl_lines="5-5"
+	local newTome: Tome.Tome = Tome.new()
+	
+	local part: BasePart = newTome:Add(workspace.Part)
+	part:AddTag("Test")
+	
+	print(newTome:GetObjectsWithTag("Test")) --> {Instance(Part, FFFFF)}
+	```
+
+---
