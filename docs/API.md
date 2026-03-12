@@ -1012,3 +1012,40 @@ Returns objects that have the provided type.
 	```
 
 ---
+
+### `#!luau Tome:GetPage`
+
+!!! info "Arguments"
+	1. `#!luau name: string` &mdash; The name of the Page to get.
+
+!!! tip "Returns"
+	1. `#!luau page: Tome?` &mdash; The Page that was fetched.
+
+Returns a Page within the Tome from a given name. If the Page with the name doesn't exist, then nil is returned.
+
+=== "Basic Example"
+	```luau linenums="1" hl_lines="10-10"
+	local newTome: Tome.Tome = Tome.new()
+	
+	-- pretend we lose access to our Page "Test" due to being inside a deep scope
+	do
+		newTome:AddPage("Test")
+	end
+	
+	-- now we can fetch it
+	
+	local myPage: Tome.Tome? = newTome:GetPage("Test")
+	
+	print(myPage) --> Tome(Page("Test"))
+	```
+	
+=== "Extended Example"
+	```luau linenums="1" hl_lines="3-3"
+	local newTome: Tome.Tome = Tome.new()
+	
+	local myPage: Tome.Tome? = newTome:GetPage("Test")
+	
+	print(myPage) --> nil, because we never created a Page
+	```
+
+---
