@@ -1049,3 +1049,30 @@ Returns a Page within the Tome from a given name. If the Page with the name does
 	```
 
 ---
+
+### `#!luau Tome:GetParent`
+
+!!! tip "Returns"
+	1. `#!luau parent: Tome?` &mdash; The parent of the Tome.
+
+Returns the parent Tome of the Tome that had this method invoked from. A Tome that has a parent is also referred to as a 'Page'.
+
+If a parent doesn't exist, nil is returned.
+
+=== "Basic Example"
+	```luau linenums="1" hl_lines="5-5"
+	local newTome: Tome.Tome = Tome.new()
+	
+	local myPage: Tome.Tome = newTome:AddPage("Test")
+	
+	print(myPage:GetParent()) --> Tome (newTome)
+	```
+	
+=== "Extended Example"
+	```luau linenums="1" hl_lines="3-3"
+	local newTome: Tome.Tome = Tome.new()
+	
+	print(newTome:GetParent()) --> nil, because this Tome doesn't have a parent
+	```
+
+---
