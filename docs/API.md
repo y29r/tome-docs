@@ -964,7 +964,7 @@ Returns the internal dictionary Tome uses to store objects. This table shouldn't
 	1. `#!luau tag: string` &mdash; The tag to use.
 
 !!! tip "Returns"
-	1. `#!luau objects: {[any]: DestroyMethod}` &mdash; The tagged objects.
+	1. `#!luau objects: {any}` &mdash; The tagged objects.
 
 Returns objects that have the provided tag. Only works for Instances
 
@@ -976,6 +976,39 @@ Returns objects that have the provided tag. Only works for Instances
 	part:AddTag("Test")
 	
 	print(newTome:GetObjectsWithTag("Test")) --> {Instance(Part, FFFFF)}
+	```
+
+---
+
+### `#!luau Tome:GetObjectsOfType`
+
+!!! info "Arguments"
+	1. `#!luau objectType: string` &mdash; The object type to query with.
+
+!!! tip "Returns"
+	1. `#!luau objects: {any}` &mdash; The objects that match the type provided.
+
+Returns objects that have the provided type.
+
+=== "Basic Example"
+	```luau linenums="1" hl_lines="6-6"
+	local newTome: Tome.Tome = Tome.new()
+	
+	local part: BasePart = newTome:Add(workspace.Part)
+	part:AddTag("Test")
+	
+	print(newTome:GetObjectsOfType("BasePart")) --> {Instance(Part, FFFFF)}
+	```
+	
+=== "Extended Example"
+	```luau linenums="1" hl_lines="7-7"
+	local newTome: Tome.Tome = Tome.new()
+	
+	newTome:Add(function()
+		
+	end)
+	
+	print(newTome:GetObjectsOfType("function")) --> {Function(FFFFF)}
 	```
 
 ---
