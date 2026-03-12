@@ -1076,3 +1076,28 @@ If a parent doesn't exist, nil is returned.
 	```
 
 ---
+
+### `#!luau Tome:GetTag`
+
+!!! tip "Returns"
+	1. `#!luau tag: string?` &mdash; The tag Tome uses for Tagging.
+
+Returns the tag the Tome uses for tracking Instances when Tagging is enabled. If `#!luau Tome:SetTag` was not called to alter the tag, then a standard GUID is usually returned.
+
+=== "Basic Example"
+	```luau linenums="1" hl_lines="10-10"
+	local newTome: Tome.Tome = Tome.new({
+		Tagging = true,
+	})
+	
+	print(myPage:GetTag()) --> "9d2a0ed3-21db-43aa-8d47-3e06614ef6ae"
+	```
+	
+=== "Extended Example"
+	```luau linenums="1" hl_lines="3-3"
+	local newTome: Tome.Tome = Tome.new() -- create without Tagging enabled
+	
+	print(myPage:GetTag()) --> nil, because tagging is disabled
+	```
+
+---
