@@ -1085,7 +1085,7 @@ If a parent doesn't exist, nil is returned.
 Returns the tag the Tome uses for tracking Instances when Tagging is enabled. If `#!luau Tome:SetTag` was not called to alter the tag, then a standard GUID is usually returned.
 
 === "Basic Example"
-	```luau linenums="1" hl_lines="10-10"
+	```luau linenums="1" hl_lines="5-5"
 	local newTome: Tome.Tome = Tome.new({
 		Tagging = true,
 	})
@@ -1100,4 +1100,24 @@ Returns the tag the Tome uses for tracking Instances when Tagging is enabled. If
 	print(myPage:GetTag()) --> nil, because tagging is disabled
 	```
 
+---
+
+### `#!luau Tome:GivePage`
+
+!!! info "Arguments"
+	1. `#!luau pageName: string` &mdash; The name of the Page to give.
+	2. `#!luau newParent: Tome` &mdash; The new parent of the Page.
+
+Gives a Page from the Tome that was invoked, to another Tome. If the Page doesn't exist, nothing will happen.
+
+=== "Basic Example"
+	```luau linenums="1" hl_lines="6-6"
+	local newTome: Tome.Tome = Tome.new()
+	local newTome2: Tome.Tome = Tome.new()
+	
+	local newPage: Tome.Tome = newTome:AddPage("Test")
+	
+	newTome:GivePage("Test", newTome2)
+	```
+	
 ---
