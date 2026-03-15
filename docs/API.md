@@ -1229,3 +1229,41 @@ When the RBXScriptConnection is created, it will be added to the Tome; disconnec
 	```
 
 ---
+
+### `#!luau Tome:Instance`
+
+!!! info "Arguments"
+	1. `#!luau instanceName: string` &mdash; The name of the Instance to create.
+	2. `#!luau properties: {[string]: any}` &mdash; The dictionary of properties to apply to the Instance.
+	3. `#!luau destroyMethod: DestroyMethod?` &mdash; Optional DestroyMethod to use instead of `#!luau "Destroy".
+
+!!! tip "Returns"
+	1. `#!luau instance: Instance` &mdash; The created Instance.
+
+Creates a new Instance from a given name. The Instance will automatically be added into the Tome.
+
+Optionally you can provide properties to apply to the Instance before returning it.
+
+!!! note ""
+	Properties are applied within a safe call. This means if you incorrectly apply a property, the error will be supressed. To avoid this, ensure you create the Tome with the metaprop `#!luau Warnings` set to true.
+
+Optionally you can also provide a custom destroy method.
+
+??? important "DEV-TODO"
+	Currently there's no guarantee that the property `#!luau properties.Parent` will be set after all the other properties. This is important because setting properties after parenting is slower than setting them during creation.
+	
+	This will be changed in the near future.
+
+=== "Basic Example"
+	```luau linenums="1" hl_lines="4-6"
+	local newTome: Tome.Tome = Tome.new()
+	
+	local part: BasePart = newTome:Instance("Part", {
+		Position = Vector3.new(0, 2, 0),
+	})
+	part.Parent = workspace -- setting the Parent out here
+	
+	newTome:DelayDestroy(2.0)
+	```
+
+---
