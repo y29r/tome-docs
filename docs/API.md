@@ -1220,3 +1220,28 @@ Optionally you can also provide a custom destroy method.
 	```
 
 ---
+
+### `#!luau Tome:IsDestroying`
+
+!!! tip "Returns"
+	1. `#!luau destroying: boolean` &mdash; Whether the Tome is currently destroying.
+
+Returns whether the Tome is currently being destroyed.
+
+=== "Basic Example"
+	```luau linenums="1" hl_lines="4-6"
+	local newTome: Tome.Tome = Tome.new()
+	
+	-- fake adding something into the Tome from another block of code
+	task.delay(1, function()
+		print(newTome:IsDestroying()) --> true
+	end)
+	
+	newTome:Add(function()
+		task.wait(5) --> halts the Tome, keeping it in a destroying state
+	end)
+	
+	newTome:Destroy()
+	```
+
+---
