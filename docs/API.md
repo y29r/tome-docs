@@ -1167,53 +1167,6 @@ When the RBXScriptConnection is created, it will be added to the Tome; disconnec
 	newTome:Destroy() -- will :Disconnect the RBXScriptConnection made above
 	```
 
----
-
-### `#!luau Tome:HookRunServiceSignal`
-
-!!! info "Arguments"
-	1. `#!luau signalName: RunServiceSignalName` &mdash; The name of the Signal to hook to.
-	2. `#!luau listener: (deltaTime: number) -> () | (time: number, deltaTime: number) -> ()` &mdash; The listener function to call every step.
-
-!!! tip "Returns"
-	1. `#!luau connection: RBXScriptConnection` &mdash; The connection between the Signal and listener.
-
-Hooks to a RunService Signal, which can be any one of the following:
-```luau
-"RenderStepped"
-"Heartbeat"
-"PostSimulation"
-"PreAnimation"
-"PreRender"
-"PreSimulation"
-"Stepped"
-```
-
-When the RBXScriptConnection is created, it will be added to the Tome; disconnecting it once the Tome is destroyed.
-
-=== "Basic Example"
-	```luau linenums="1" hl_lines="4-6"
-	local newTome: Tome.Tome = Tome.new()
-	
-	-- hooks to the RunService.RenderStepped Signal
-	newTome:HookRunServiceSignal("RenderStepped", function(deltaTime: number)
-		print(deltaTime)
-	end)
-	```
-	
-=== "Extended Example"
-	```luau linenums="1" hl_lines="3-5"
-	local newTome: Tome.Tome = Tome.new()
-	
-	newTome:HookRunServiceSignal("RenderStepped", function(deltaTime: number)
-		print(deltaTime)
-	end)
-	
-	task.wait(1)
-	
-	newTome:Destroy() -- will :Disconnect the RBXScriptConnection made above
-	```
-	
 === "Extended Example 2"
 	```luau linenums="1" hl_lines="5-7"
 	local newTome: Tome.Tome = Tome.new()
