@@ -1168,7 +1168,7 @@ When the RBXScriptConnection is created, it will be added to the Tome; disconnec
 	```
 
 === "Extended Example 2"
-	```luau linenums="1" hl_lines="5-7"
+	```luau linenums="1" hl_lines="4-6"
 	local newTome: Tome.Tome = Tome.new()
 	
 	-- RunService.Stepped is different from the others, in the sense that it responds with 2 number arguments
