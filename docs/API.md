@@ -1275,3 +1275,32 @@ Moves the provided object into another Tome. Removing it from the Tome that this
 	```
 
 ---
+
+### `#!luau Tome:Parent`
+
+!!! info "Arguments"
+	1. `#!luau tome: Tome` &mdash; The new parent to live under.
+
+!!! tip "Returns"
+	1. `#!luau tome: Tome` &mdash; Returns the Tome this method was called from.
+
+Parents the Tome to another Tome. If the Tome already has a parent, then it will unparent from it first.
+
+!!! note ""
+	If the Tome doesn't have a name, the Tome will **not** be parented. To name a Tome you can do the following:
+	```luau linenums="1" hl_lines="2-2"
+	local newTome: Tome.Tome = Tome.new()
+	newTome:Rename("Drink water")
+	```
+	
+	All Tomes that are created with `#!luau Tome:AddPage, Tome:extend, Tome:Extend` will come with a standard GUID name.
+
+=== "Basic Example"
+	```luau linenums="1" hl_lines="4-4"
+	local newTome: Tome.Tome = Tome.new()
+	
+	local newTome2: Tome.Tome = Tome.new()
+	newTome2:Parent(newTome) --> parents 'newTome2' under 'newTome'
+	```
+
+---
