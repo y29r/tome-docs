@@ -1304,3 +1304,32 @@ Parents the Tome to another Tome. If the Tome already has a parent, then it will
 	```
 
 ---
+
+### `#!luau Tome:Remove`
+
+!!! info "Arguments"
+	1. `#!luau object: any` &mdash; The object to remove from the Tome.
+
+!!! tip "Returns"
+	1. `#!luau object: object` &mdash; The same object that was passed in.
+
+Safely removes the provided object from the Tome, if it exists inside it.
+Removing an object does **not** destroy it.
+
+!!! note ""
+	If the Tome has Tagging enabled and the object is an Instance, the object will have the Tome's tag removed as well.
+
+=== "Basic Example"
+	```luau linenums="1" hl_lines="7-7"
+	local newTome: Tome.Tome = Tome.new()
+	
+	local part: BasePart = newTome:Add(workspace.Part)
+	
+	print(newTome:Contains(workspace.Part)) --> true
+	
+	newTome:Remove(part)
+	
+	print(newTome:Contains(workspace.Part)) --> false
+	```
+
+---
