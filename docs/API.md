@@ -1245,3 +1245,33 @@ Returns whether the Tome is currently being destroyed.
 	```
 
 ---
+
+### `#!luau Tome:Move`
+
+!!! info "Arguments"
+	1. `#!luau object: any` &mdash; The object to move from the Tome.
+	2. `#!luau tome: Tome` &mdash; The Tome to move the object into.
+
+!!! tip "Returns"
+	1. `#!luau object: object` &mdash; The object object passed in.
+
+Moves the provided object into another Tome. Removing it from the Tome that this method was called from as well.
+
+!!! note ""
+	During the move, the object will keep the exact same destroy method inside the new Tome.
+
+=== "Basic Example"
+	```luau linenums="1" hl_lines="7-7"
+	local newTome: Tome.Tome = Tome.new()
+	
+	newTome:Add(workspace.Part)
+	
+	local newTome2: Tome.Tome = Tome.new()
+	
+	newTome:Move(workspace.Part, newTome2)
+	
+	print(newTome:Contains(workspace.Part)) --> false
+	print(newTome2:Contains(workspace.Part)) --> true
+	```
+
+---
