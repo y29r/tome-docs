@@ -1537,3 +1537,25 @@ This is mainly used for debugging, or very case-specific situations.
 	```
 
 ---
+
+### `#!luau Tome:Signal`
+
+!!! tip "Returns"
+	1. `#!luau signal: Signal` &mdash; The created Signal
+
+Creates a standard Signal implementation, and adds it to the Tome. This is from earlier versions of Tome.
+
+=== "Basic Example"
+	```luau linenums="1" hl_lines="3-3"
+	local newTome: Tome.Tome = Tome.new()
+	
+	local signal: Tome.Signal = newTome:Signal()
+	
+	signal:Connect(function(argument: string)
+		print(argument)
+	end)
+	
+	signal:Fire("Hello, world!") --> "Hello, world!"
+	```
+
+---
