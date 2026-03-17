@@ -1333,3 +1333,25 @@ Removing an object does **not** destroy it.
 	```
 
 ---
+
+### `#!luau Tome:RemoveTuple`
+
+!!! info "Arguments"
+	1. `#!luau Tuple: ...any` &mdash; The objects to remove from the Tome.
+
+!!! tip "Returns"
+	1. `#!luau Tuple: ...object` &mdash; The same objects that were passed in.
+
+The same as `#!luau Tome:Remove` with the one change of being able to provide a tuple of objects, instead of just one.
+
+=== "Basic Example"
+	```luau linenums="1" hl_lines="6-6"
+	local newTome: Tome.Tome = Tome.new()
+	
+	local part: BasePart = newTome:Add(workspace.Part)
+	local part2: BasePart = newTome:Add(workspace.Part2)
+	
+	newTome:RemoveTuple(part, part2)
+	```
+
+---
