@@ -1379,3 +1379,22 @@ The same as `#!luau Tome:Remove` with the one change of being able to provide an
 	```
 
 ---
+
+### `#!luau Tome:RemoveObjectsWithTag`
+
+!!! info "Arguments"
+	1. `#!luau tag: string` &mdash; The tag to use for getting the objects to remove.
+
+Removes all objects from the Tome that have the specified tag. This only works for Instances.
+
+=== "Basic Example"
+	```luau linenums="1" hl_lines="6-6"
+	local newTome: Tome.Tome = Tome.new()
+	
+	local part: BasePart = newTome:Add(workspace.Part)
+	part:AddTag("IShouldBeRemoved")
+	
+	newTome:RemoveObjectsWithTag("IShouldBeRemoved")
+	```
+
+---
