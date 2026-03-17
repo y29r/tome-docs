@@ -1457,3 +1457,36 @@ Renames the Tome internally. This is usually used for debugging. But can be used
 	```
 
 ---
+
+### `#!luau Tome:RipPage`
+
+!!! info "Arguments"
+	1. `#!luau nameOrPage: string | Tome` &mdash; The name of a Page/Tome or the Page/Tome itself.
+	
+!!! tip "Returns"
+	1. `#!luau tome: Tome` &mdash; The Tome itself (for chaining purposes)
+
+Removes the Page from the Tome permanently. Destroying itself before being removed.
+
+!!! warning ""
+	If a Page doesn't exist, an error will be thrown. To avoid this, you can call `#!luau Tome:GetPage` before attempting to remove a Page.
+
+=== "Basic Example"
+	```luau linenums="1" hl_lines="4-4"
+	local newTome: Tome.Tome = Tome.new()
+	
+	local newPage: Tome.Tome = newTome:AddPage()
+	newTome:RipPage(newPage) --> destroys, and removes the newPage from newTome
+	```
+
+=== "Extended Example"
+	```luau linenums="1" hl_lines="6-6"
+	local newTome: Tome.Tome = Tome.new()
+	
+	local newPage: Tome.Tome = newTome:AddPage("Test")
+	local newPage2: Tome.Tome = newTome:AddPage("Test2")
+	
+	newTome:RipPage(newPage):RipPage(newPage2)
+	```
+
+---
