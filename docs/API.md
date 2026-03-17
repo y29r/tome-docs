@@ -1398,3 +1398,41 @@ Removes all objects from the Tome that have the specified tag. This only works f
 	```
 
 ---
+
+### `#!luau Tome:RemoveObjectsOfType`
+
+!!! info "Arguments"
+	1. `#!luau type: string` &mdash; The type to use for getting the objects to remove.
+
+Removes all objects from the Tome that are of the specified type.
+
+=== "Basic Example"
+	```luau linenums="1" hl_lines="5-5"
+	local newTome: Tome.Tome = Tome.new()
+	
+	local part: BasePart = newTome:Add(workspace.Part)
+	
+	newTome:RemoveObjectsOfType("BasePart")
+	```
+
+=== "Extended Example"
+	```luau linenums="1" hl_lines="7-7"
+	local newTome: Tome.Tome = Tome.new()
+	
+	newTome:Add(function()
+		
+	end)
+	
+	newTome:RemoveObjectsOfType("function")
+	```
+	
+=== "Extended Example 2"
+	```luau linenums="1" hl_lines="5-5"
+	local newTome: Tome.Tome = Tome.new()
+	
+	newTome:Add(Tome.new())
+	
+	newTome:RemoveObjectsOfType("Tome")
+	```
+
+---
