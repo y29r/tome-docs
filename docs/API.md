@@ -1581,3 +1581,45 @@ Manually unbinds the render step RunService binding.
 	```
 
 ---
+
+### `#!luau Tome:Tween`
+
+!!! info "Arguments"
+	1. `#!luau instance: Instance` &mdash; The instance to tween.
+	2. `#!luau tweenInfo: TweenInfo` &mdash; The tween info to use to mutate the instance.
+	3. `#!luau propertyTable: {[string]: any}` &mdash; The properties to tween to.
+	4. `#!luau metadata: Metadata?` &mdash; The metadata to mutate how to tween works.
+
+!!! tip "Returns"
+	1. `#!luau tween: Tween` &mdash; The created tween.
+
+Creates a Tween and adds it into the Tome. This method comes with some extra benefits, such as metadata:
+
+Metadata changes how the tween works. See [Link... once I make it] for more information.
+
+=== "Basic Example"
+	```luau linenums="1" hl_lines="9-9"
+	local newTome: Tome.Tome = Tome.new()
+	
+	newTome:Tween(
+		workspace.Part,
+		TweenInfo.new(2),
+		{ Size = Vector3.new(2, 2, 2) }
+	):Play()
+	```
+	
+=== "Extended Example"
+	In this example, once the tween completes, the Tome gets destroyed. This is useful for creating timed events without creating new threads.
+	
+	```luau linenums="1" hl_lines="3-8"
+	local newTome: Tome.Tome = Tome.new()
+	
+	newTome:Tween(
+		workspace.Part,
+		TweenInfo.new(2),
+		{ Size = Vector3.new(2, 2, 2) },
+		{ Play = true }
+	).Completed:Once(newTome:WrapDestroy())
+	```
+	
+---
