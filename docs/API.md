@@ -1623,3 +1623,27 @@ Metadata changes how the tween works. See [Link... once I make it] for more info
 	```
 	
 ---
+
+### `#!luau Tome:Table`
+
+!!! info "Arguments"
+	1. `#!luau table: {[any]: any}?` &mdash; The table to use instead of creating a new one.
+
+!!! tip "Returns"
+	1. `#!luau table: table | {[any]: any}` &mdash; The same table passed in, or the created table.
+
+Adds (or creates) a table into the Tome. The table will have its destroy method as `#!luau table.clear`. Once the Tome gets destroyed, the table will clear itself.
+
+This is useful in semi-round systems where you may track players within a sub-round, and need to clear them after the sub-round ends.
+
+=== "Basic Example"
+	```luau linenums="1" hl_lines="4-6"
+	local newTome: Tome.Tome = Tome.new()
+	
+	local parts: {BasePart} = newTome:Table({
+		workspace.Part,
+		workspace.Part2
+	})
+	```
+
+---
