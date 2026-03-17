@@ -1436,3 +1436,24 @@ Removes all objects from the Tome that are of the specified type.
 	```
 
 ---
+
+### `#!luau Tome:Rename`
+
+!!! info "Arguments"
+	1. `#!luau name: string` &mdash; The new name for the Tome.
+
+Renames the Tome internally. This is usually used for debugging. But can be used for other purposes too.
+
+=== "Basic Example"
+	```luau linenums="1" hl_lines="6-6"
+	local newTome: Tome.Tome = Tome.new()
+	
+	local newPage: Tome.Tome = newTome:AddPage("Test")
+	print(newTome) --> {pages = {["Test"] = {...}}}
+	
+	newPage:Rename("Test")
+	
+	print(newTome) --> {pages = {["Test2"] = {...}}}
+	```
+
+---
