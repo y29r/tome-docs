@@ -1559,3 +1559,25 @@ Creates a standard Signal implementation, and adds it to the Tome. This is from 
 	```
 
 ---
+
+### `#!luau Tome:UnbindRenderStepped`
+
+!!! info "Arguments"
+	1. `#!luau name: string` &mdash; The name of the binding.
+
+Manually unbinds the render step RunService binding.
+
+=== "Basic Example"
+	```luau linenums="1" hl_lines="9-9"
+	local newTome: Tome.Tome = Tome.new()
+	
+	newTome:BindRenderStepped("Test", 201, function(deltaTime: number)
+		print(deltaTime)
+	end)
+	
+	task.wait(1)
+	
+	newTome:UnbindRenderStepped("Test")
+	```
+
+---
