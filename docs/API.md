@@ -1490,3 +1490,19 @@ Removes the Page from the Tome permanently. Destroying itself before being remov
 	```
 
 ---
+
+### `#!luau Tome:RipPages`
+
+Destroys **all** Pages inside the Tome, and removes them.
+
+=== "Basic Example"
+	```luau linenums="1" hl_lines="6-6"
+	local newTome: Tome.Tome = Tome.new()
+	
+	local newPage: Tome.Tome = newTome:AddPage()
+	local newPage2: Tome.Tome = newTome:AddPage()
+	
+	newTome:RipPages()
+	```
+
+---
