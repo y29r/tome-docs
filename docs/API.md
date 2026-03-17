@@ -1506,3 +1506,34 @@ Destroys **all** Pages inside the Tome, and removes them.
 	```
 
 ---
+
+### `#!luau Tome:SetTag`
+
+!!! info "Arguments"
+	1. `#!luau tag: string` &mdash; The new tag to apply.
+	
+!!! tip "Returns"
+	1. `#!luau tome: Tome` &mdash; The Tome itself (for chaining purposes)
+
+Sets a new tag for the Tome. This will remove the previous tag, which means all other objects that were tagged, will have their tag replaced with the new one. This will have to add and remove the tags for instances, which can be slow when used frequently, in mass.
+
+This is mainly used for debugging, or very case-specific situations.
+
+=== "Basic Example"
+	```luau linenums="1" hl_lines="4-9"
+	local newTome: Tome.Tome = Tome.new({
+		Tagging = true,
+	})
+	newTome:SetTag("Test")
+	
+	local part: BasePart = newTome:Add(workspace.Part)
+	print(part:HasTag("Test")) --> true
+	
+	newTome:SetTag("Test2")
+	
+	print(part:HasTag("Test")) --> false
+	print(part:HasTag("Test2")) --> true
+	
+	```
+
+---
