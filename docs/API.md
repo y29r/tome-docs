@@ -1355,3 +1355,27 @@ The same as `#!luau Tome:Remove` with the one change of being able to provide a 
 	```
 
 ---
+
+### `#!luau Tome:RemoveFromArray`
+
+!!! info "Arguments"
+	1. `#!luau arrayOfObjects: {any}` &mdash; The objects to remove from the Tome.
+
+!!! tip "Returns"
+	1. `#!luau arrayOfObjects: {any}` &mdash; The same objects that were passed in.
+
+The same as `#!luau Tome:Remove` with the one change of being able to provide an array of objects, instead of just one.
+
+=== "Basic Example"
+	```luau linenums="1" hl_lines="8-8"
+	local newTome: Tome.Tome = Tome.new()
+	
+	local array: {BasePart} = {
+		newTome:Add(workspace.Part),
+		newTome:Add(workspace.Part2),
+	}
+	
+	newTome:RemoveArray(array)
+	```
+
+---
