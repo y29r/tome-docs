@@ -31,7 +31,7 @@ Creating a Tome is very easy.
 ---
 
 ## Functions
-Tome uses a single constructor to create a Tome object
+Functions in Tome can be used directly from the module without instantiation.
 
 ### `#!luau Tome.Is`
 
