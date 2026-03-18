@@ -8,6 +8,9 @@
 [Tome:DestroyAllPages]: API.md/#tomedestroyallpages
 [Tome:Contains]: API.md/#tomecontains
 [Tome:Remove]: API.md/#tomeremove
+[Tome.schedule]: API.md/#tomeschedule
+[Tome.unschedule]: API.md/#tomeunschedule
+[Schedular]: Schedular.md
 [Instance.fromExisting]: https://create.roblox.com/docs/reference/engine/datatypes/Instance#fromExisting
 [Tome:SetTag]: API.md/#tomesettag
 [RunService:BindToRenderStep]: https://create.roblox.com/docs/reference/engine/classes/RunService#BindToRenderStep
@@ -62,6 +65,82 @@ Returns whether the provided object is a Tome object. This function will check a
 	print("#1 Is this object a Tome? ", Tome.Is({})) -- false
 	print("#2 Is this object a Tome? ", Tome.Is(newTome)) -- true
 	print("#3 Is this object a Tome? ", Tome.Is()) -- false
+	```
+
+---
+
+### `#!luau Tome.schedule`
+
+!!! info "Arguments"
+	1. `#!luau object: any` &mdash; The object to schedule.
+	2. `#!luau lifeTime: number` &mdash; The life time to give the object.
+	3. `#!luau destroyMethod: DestroyMethod?` &mdash; The DestroyMethod to use when destroying the object.
+
+!!! tip "Returns"
+	1. `#!luau object: object` &mdash; The same object that was passed in.
+
+Adds the provided object into the [Schedular]. The object will be destroyed after the provided life time has elapsed.
+
+=== "Basic Example"
+	```luau linenums="1" hl_lines="1-1"
+	Tome.schedule(workspace.Part, 2.0) -- destroys the part after ~2 seconds
+	```
+=== "Extended Example"
+	In this example, the 3rd argument lets Tome know how the object will be destroyed.
+	
+	```luau linenums="1" hl_lines="1-1"
+	Tome.schedule(workspace.Part, 2.0, "Destroy") -- destroys the part after ~2 seconds
+	```
+
+---
+
+### `#!luau Tome.unschedule`
+
+!!! info "Arguments"
+	1. `#!luau object: any` &mdash; The object to unschedule.
+
+!!! tip "Returns"
+	1. `#!luau object: object` &mdash; The same object that was passed in.
+
+Removes the provided object from the [Schedular]. The object will not be destroyed.
+
+=== "Basic Example"
+	```luau linenums="1" hl_lines="5-5"
+	Tome.schedule(workspace.Part, 2.0) -- destroys the part after ~2 seconds
+	
+	task.wait(1)
+	
+	Tome.unschedule(workspace.Part) -- we decide to change our mind
+	```
+
+---
+
+### `#!luau Tome.group`
+
+!!! info "Arguments"
+	1. `#!luau Tuple: ...any` &mdash; The tuple set of objects to group.
+
+!!! tip "Returns"
+	1. `#!luau objects: Group<any>` &mdash; The same objects that were passed in, in array form.
+
+Groups together the provided tuple set of objects and puts them inside an array attached to a Tome group metatable to use as a symbol.
+
+Grouping is currently only used for [Tome.schedule] and can be used to destroy objects as a group, rather than one by one. If you find yourself calling `#!luau Tome.schedule` a lot, you may benefit from this.
+
+You can also call the group like a function, and it will destroy the objects as well.
+
+=== "Basic Example"
+	```luau linenums="1" hl_lines="1-1"
+	local myParts: Tome.Group<BasePart> = Tome.group(workspace.Part, workspace.Part2)
+	
+	Tome.schedule(myParts, 2.0) -- destroys the group (and both parts)
+	```
+
+=== "Extended Example"
+	```luau linenums="1" hl_lines="1-1"
+	local myParts: Tome.Group<BasePart> = Tome.group(workspace.Part, workspace.Part2)
+	
+	myParts() -- destroys the group (and both parts)
 	```
 
 ---
