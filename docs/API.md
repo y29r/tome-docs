@@ -214,6 +214,19 @@ This is usually only used in pair with [Tome:AddFromDictionary]. This is used as
 
 ---
 
+### `#!luau Tome.VERSION`
+
+Returns the version of the Tome being used.
+
+=== "Basic Example"
+	```luau linenums="1" hl_lines="1-1"
+	local TomeVersion: string = Tome.VERSION
+	
+	print(TomeVersion) --> "v#.#.#.#"
+	```
+
+---
+
 ## Methods
 Tome offers a variety of methods to use on a Tome object
 
