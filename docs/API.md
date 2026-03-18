@@ -1,4 +1,16 @@
 [Tagging]: Tagging.md
+[Tome:AddFromDictionary]: API.md/#tomeaddfromdictionary
+[Tome:Attach]: API.md/#tomeattach
+[Tome:Add]: API.md/#tomeadd
+[Tome:Destroy]: API.md/#tomedestroy
+[Tome:Connect]: API.md/#tomeconnect
+[Tome:DestroyAllObjects]: API.md/#tomedestroyallobjects
+[Tome:DestroyAllPages]: API.md/#tomedestroyallpages
+[Tome:Contains]: API.md/#tomecontains
+[Tome:Remove]: API.md/#tomeremove
+[Instance.fromExisting]: https://create.roblox.com/docs/reference/engine/datatypes/Instance#fromExisting
+[Tome:SetTag]: API.md/#tomesettag
+[RunService:BindToRenderStep]: https://create.roblox.com/docs/reference/engine/classes/RunService#BindToRenderStep
 
 # API
 The official API for Tome giving basic examples for constructors, embedded systems and methods.
@@ -53,6 +65,73 @@ Returns whether the provided object is a Tome object. This function will check a
 	```
 
 ---
+
+## Variables
+Get access to Tome internals to speed up certain methods manually.
+
+### `#!luau Tome.FunctionType`
+
+Providing this as a DestroyMethod for methods like `#!luau Tome:Add` can significantly speed up adding functions into the Tome.
+
+=== "Basic Example"
+	```luau linenums="1" hl_lines="5-5"
+	local newTome = Tome.new()
+	
+	newTome:Add(function()
+		
+	end, Tome.FunctionType) -- Tome will skip finding a DestroyMethod and use this instead.
+	```
+
+---
+
+### `#!luau Tome.ThreadType`
+
+Providing this as a DestroyMethod for methods like `#!luau Tome:Add` can significantly speed up adding threads into the Tome.
+
+=== "Basic Example"
+	```luau linenums="1" hl_lines="7-7"
+	local newTome = Tome.new()
+	
+	local myThread: thread = task.spawn(function()
+		
+	end)
+	
+	newTome:Add(myThread, Tome.ThreadType) -- Tome will skip finding a DestroyMethod and use this instead.
+	```
+
+---
+
+### `#!luau Tome.TweenType`
+
+Providing this as a DestroyMethod for methods like `#!luau Tome:Add` can significantly speed up adding tweens into the Tome.
+
+This DestroyMethod will first call `#!luau Tween:Cancel` and then `#!luau Tween:Destroy`.
+
+=== "Basic Example"
+	```luau linenums="1" hl_lines="5-5"
+	local newTome = Tome.new()
+	
+	local tween: Tween = TweenService:Create(...)
+	
+	newTome:Add(tween, Tome.TweenType) -- Tome will skip finding a DestroyMethod and use this instead.
+	```
+
+---
+
+### `#!luau Tome.Guess`
+
+This is usually only used in pair with [Tome:AddFromDictionary]. This is used as a value in the dictionary to let Tome know that it should calculate the DestroyMethod.
+
+=== "Basic Example"
+	```luau linenums="1" hl_lines="4-4"
+	local newTome = Tome.new()
+	
+	local objects: {[any]: Tome.DestroyMethod} = {
+		[workspace.Part] = Tome.Guess,
+	}
+	
+	newTome:AddFromDictionary(objects)
+	```
 
 ---
 
@@ -358,7 +437,7 @@ Attaches the Tome to one of the few object types. Once attached, when either tri
 	1. `#!luau cleanUp: () -> ()` &mdash; The clean up function.
 	2. `#!luau attachments: {Attachment}` &mdash; The array of attachments (shouldn't be mutated)
 
-Works just like `#!luau Tome:Attach` however any amount of objects can be provided, and once all the objects are successfully connected, a single clean up function is returned, which when called, will free all the attachments at once.
+Works just like [Tome:Attach] however any amount of objects can be provided, and once all the objects are successfully connected, a single clean up function is returned, which when called, will free all the attachments at once.
 
 !!! important ""
 	It's important to note that this method internally calls `#!luau Tome:Attach`. The same warning(s) apply from `#!luau Tome:Attach`, to here.
@@ -412,7 +491,7 @@ Works just like `#!luau Tome:Attach` however any amount of objects can be provid
 !!! tip "Returns"
 	1. `#!luau unbind: () -> ()` &mdash; The unbind function (manual clean up)
 
-Calls the [`#!luau RunService:BindToRenderStep`](https://create.roblox.com/docs/reference/engine/classes/RunService#BindToRenderStep) method. Tome adds a function inside of itself to unbind the render binding once the Tome is destroyed.
+Calls the [RunService:BindToRenderStep] method. Tome adds a function inside of itself to unbind the render binding once the Tome is destroyed.
 
 Optionally you can call the `#!luau unbind()` function returned to manually clean up the binding.
 
@@ -510,7 +589,7 @@ Connects to a Signal, and adding it into the Tome. Can be a custom-made Signal o
 !!! tip "Returns"
 	1. `#!luau Connection: {Disconnect: () -> ()} | RBXScriptConnection` &mdash; The Connection object.
 
-Works exactly the same as `#!luau Tome:Connect`, however only connecting to a Signal once, and adding it into the Tome. Can be a custom-made Signal or an RBXScriptSignal.
+Works exactly the same as [Tome:Connect], however only connecting to a Signal once, and adding it into the Tome. Can be a custom-made Signal or an RBXScriptSignal.
 
 === "Basic Example"
 	```luau linenums="1" hl_lines="3-5"
@@ -622,7 +701,7 @@ Duplicate of `#!luau Tome:AddPage`
 !!! tip "Returns"
 	1. `#!luau object: object` &mdash; The same object passed in.
 
-The same as `#!luau Tome:Add` but executes without the majority of features in Tome.
+The same as [Tome:Add] but executes without the majority of features in Tome.
 This method will skip over sanity checks like whether the Tome is currently being destroyed, tagging, and recursion mistakes with nested Tomes.
 
 If you prioritize speed over features, then using this will benefit you.
@@ -708,7 +787,7 @@ Calls `#!luau task.defer`, adds the deferred thread into the Tome, and returns i
 !!! tip "Returns"
 	1. `#!luau thread: thread` &mdash; The thread responsible for destroying the Tome.
 
-Calls `#!luau task.delay`, with the 1st argument being `'duration'`. Once that time has elapsed successfully, the thread will call `#!luau Tome:Destroy` internally.
+Calls `#!luau task.delay`, with the 1st argument being `'duration'`. Once that time has elapsed successfully, the thread will call [Tome:Destroy] internally.
 
 === "Basic Example"
 	```luau linenums="1" hl_lines="7-7"
@@ -728,7 +807,7 @@ Calls `#!luau task.delay`, with the 1st argument being `'duration'`. Once that t
 !!! info "Arguments"
 	1. `#!luau Tuple: ...any` &mdash; Any amount of params to pass into the `#!luau Tome:OnDestroy` callbacks.
 
-Internally calls `#!luau Tome:DestroyAllObjects` and `#!luau Tome:DestroyAllPages`. During both states of destruction, the Tome will enter a destroying state, where most attempts at mutation e.g. `#!luau Tome:Add` will throw an error. This state is usually very short lived (<0.00001s)
+Internally calls [Tome:DestroyAllObjects] and [Tome:DestroyAllPages]. During both states of destruction, the Tome will enter a destroying state, where most attempts at mutation e.g. [Tome:Add] will throw an error. This state is usually very short lived (<0.00001s)
 
 === "Basic Example"
 	```luau linenums="1" hl_lines="7-7"
@@ -938,7 +1017,7 @@ Returns whether the provided object exists inside the Tome
 !!! tip "Returns"
 	1. `#!luau exists: boolean` &mdash; Whether the object exists.
 
-The exact same as `#!luau Tome:Contains`.
+The exact same as [Tome:Contains].
 
 === "Basic Example"
 	```luau linenums="1" hl_lines="5-5"
@@ -967,7 +1046,7 @@ The exact same as `#!luau Tome:Contains`.
 !!! tip "Returns"
 	1. `#!luau object: Instance` &mdash; The instantiated instance created from the 1st argument.
 
-Creates an Instance from an existing one. See [this page](https://create.roblox.com/docs/reference/engine/datatypes/Instance#fromExisting) for more information.
+Creates an Instance from an existing one. See [Instance.fromExisting] for more information.
 
 If the Instance is created successfully, the Instance will be added into the Tome.
 
@@ -1134,7 +1213,7 @@ If a parent doesn't exist, nil is returned.
 !!! tip "Returns"
 	1. `#!luau tag: string?` &mdash; The tag Tome uses for [Tagging].
 
-Returns the tag the Tome uses for tracking Instances when [Tagging] is enabled. If `#!luau Tome:SetTag` was not called to alter the tag, then a standard GUID is usually returned.
+Returns the tag the Tome uses for tracking Instances when [Tagging] is enabled. If [Tome:SetTag] was not called to alter the tag, then a standard GUID is usually returned.
 
 === "Basic Example"
 	```luau linenums="1" hl_lines="5-5"
@@ -1394,7 +1473,7 @@ Removing an object does **not** destroy it.
 !!! tip "Returns"
 	1. `#!luau Tuple: ...object` &mdash; The same objects that were passed in.
 
-The same as `#!luau Tome:Remove` with the one change of being able to provide a tuple of objects, instead of just one.
+The same as [Tome:Remove] with the one change of being able to provide a tuple of objects, instead of just one.
 
 === "Basic Example"
 	```luau linenums="1" hl_lines="6-6"
@@ -1416,7 +1495,7 @@ The same as `#!luau Tome:Remove` with the one change of being able to provide a 
 !!! tip "Returns"
 	1. `#!luau arrayOfObjects: {any}` &mdash; The same objects that were passed in.
 
-The same as `#!luau Tome:Remove` with the one change of being able to provide an array of objects, instead of just one.
+The same as [Tome:Remove] with the one change of being able to provide an array of objects, instead of just one.
 
 === "Basic Example"
 	```luau linenums="1" hl_lines="8-8"
@@ -1569,7 +1648,7 @@ Destroys **all** Pages inside the Tome, and removes them.
 
 Sets a new tag for the Tome. This will remove the previous tag, which means all other objects that were tagged, will have their tag replaced with the new one. This will have to add and remove the tags for instances, which can be slow when used frequently, in mass.
 
-This is mainly used for debugging, or very case-specific situations.
+This is mainly used for debugging, or very case-specific situations with [Tagging].
 
 === "Basic Example"
 	```luau linenums="1" hl_lines="4-9"
@@ -1709,14 +1788,14 @@ This is useful in semi-round systems where you may track players within a sub-ro
 !!! tip "Returns"
 	1. `#!luau cleanUp: () -> ()` &mdash; A clean up function to remove the callback.
 
-Adds a callback function into the Tome that listens for when the Tome gets destroyed. The callback will recieve the same arguments that were passed in `#!luau Tome:Destroy`. This can act as a sort of Signal.
+Adds a callback function into the Tome that listens for when the Tome gets destroyed. The callback will recieve the same arguments that were passed in [Tome:Destroy]. This can act as a sort of Signal.
 
 Optionally you can provide OnDestroyParams that affect when and how the callback gets called.
 
 Currently the supported parameters are:
 `Synchronous`: Will call the callback using `task.spawn` instead of directly calling it. This is useful if you know the callback will yield.
 `Deferred`: Will call the callback using `task.defer`. This takes priority over `Synchronous`, but `Synchronous` must be defined as true.
-`RemoveOnDestroy`: Will call the callback, and then remove it from the Tome. In cases like this, it's better to use `#!luau Tome:Add(YOUR_CALLBACK)` which does the same thing, while being more inline with Tome.
+`RemoveOnDestroy`: Will call the callback, and then remove it from the Tome. In cases like this, it's better to use [Tome:Add] which does the same thing, while being more inline with Tome.
 
 !!! note ""
 	By default, `Synchronous` is set to true. This is to prevent hard yielding. If for whatever reason you need the Tome callback thread to yield, you can manually set it to false.
@@ -1759,7 +1838,7 @@ Currently the supported parameters are:
 	```
 
 === "Extended Example 3"
-	In this example, nothing happens because the callback was removed after it was called once. Hence the second time we call `#!luau Tome:Destroy`, nothing happens.
+	In this example, nothing happens because the callback was removed after it was called once. Hence the second time we call [Tome:Destroy], nothing happens.
 	
 	```luau linenums="1" hl_lines="4-7"
 	local newTome: Tome.Tome = Tome.new()
