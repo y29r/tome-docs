@@ -1,3 +1,4 @@
+[Tagging]: Tagging.md
 
 # API
 The official API for Tome giving basic examples for constructors, embedded systems and methods.
@@ -586,6 +587,31 @@ Duplicate of `#!luau Tome:AddPage`
 
 ---
 
+### `#!luau Tome:FastAdd`
+
+!!! info "Arguments"
+	1. `#!luau object: any` &mdash; The object to add into the Tome.
+	2. `#!luau destroyMethod: DestroyMethod?` &mdash; Destroy method to use instead of Tome finding the destroy method.
+	
+!!! tip "Returns"
+	1. `#!luau object: object` &mdash; The same object passed in.
+
+The same as `#!luau Tome:Add` but executes without the majority of features in Tome.
+This method will skip over sanity checks like whether the Tome is currently being destroyed, tagging, and recursion mistakes with nested Tomes.
+
+If you prioritize speed over features, then using this will benefit you.
+
+=== "Basic Example"
+	```luau linenums="1" hl_lines="3-3"
+	local newTome: Tome.Tome = Tome.new()
+	
+	newTome:FastAdd(workspace.Part) -- adds the Part, just faster
+	
+	newTome:Destroy() --> destroys the part as normal
+	```
+
+---
+
 ### `#!luau Tome:Spawn`
 
 !!! info "Arguments"
@@ -1080,9 +1106,9 @@ If a parent doesn't exist, nil is returned.
 ### `#!luau Tome:GetTag`
 
 !!! tip "Returns"
-	1. `#!luau tag: string?` &mdash; The tag Tome uses for Tagging.
+	1. `#!luau tag: string?` &mdash; The tag Tome uses for [Tagging].
 
-Returns the tag the Tome uses for tracking Instances when Tagging is enabled. If `#!luau Tome:SetTag` was not called to alter the tag, then a standard GUID is usually returned.
+Returns the tag the Tome uses for tracking Instances when [Tagging] is enabled. If `#!luau Tome:SetTag` was not called to alter the tag, then a standard GUID is usually returned.
 
 === "Basic Example"
 	```luau linenums="1" hl_lines="5-5"
@@ -1317,7 +1343,7 @@ Safely removes the provided object from the Tome, if it exists inside it.
 Removing an object does **not** destroy it.
 
 !!! note ""
-	If the Tome has Tagging enabled and the object is an Instance, the object will have the Tome's tag removed as well.
+	If the Tome has [Tagging] enabled and the object is an Instance, the object will have the Tome's tag removed as well.
 
 === "Basic Example"
 	```luau linenums="1" hl_lines="7-7"
@@ -1670,7 +1696,7 @@ Currently the supported parameters are:
 	By default, `Synchronous` is set to true. This is to prevent hard yielding. If for whatever reason you need the Tome callback thread to yield, you can manually set it to false.
 
 === "Basic Example"
-	```luau linenums="1" hl_lines="4-6"
+	```luau linenums="1" hl_lines="4-5"
 	local newTome: Tome.Tome = Tome.new()
 	
 	newTome:OnDestroy(function()
@@ -1681,7 +1707,7 @@ Currently the supported parameters are:
 	```
 
 === "Extended Example"
-	```luau linenums="1" hl_lines="4-6"
+	```luau linenums="1" hl_lines="4-5"
 	local newTome: Tome.Tome = Tome.new()
 	
 	newTome:OnDestroy(function(myArgument: string)
@@ -1694,7 +1720,7 @@ Currently the supported parameters are:
 === "Extended Example 2"
 	In this example, the callback will be deferred via `!#luau task.defer`.
 	
-	```luau linenums="1" hl_lines="4-6"
+	```luau linenums="1" hl_lines="4-7"
 	local newTome: Tome.Tome = Tome.new()
 	
 	newTome:OnDestroy(function(myArgument: string)
@@ -1709,7 +1735,7 @@ Currently the supported parameters are:
 === "Extended Example 3"
 	In this example, nothing happens because the callback was removed after it was called once. Hence the second time we call `#!luau Tome:Destroy`, nothing happens.
 	
-	```luau linenums="1" hl_lines="4-6"
+	```luau linenums="1" hl_lines="4-7"
 	local newTome: Tome.Tome = Tome.new()
 	
 	newTome:OnDestroy(function(myArgument: string)
@@ -1720,4 +1746,28 @@ Currently the supported parameters are:
 	
 	newTome:Destroy("Hello, world!") --> "Hello, world!"
 	newTome:Destroy("Hello, world!") --> 
+	```
+	
+---
+
+### `#!luau Tome:Yield`
+
+!!! info "Arguments"
+	1. `#!luau thread: thread?` &mdash; The thread to yield.
+
+Adds the provided thread into the Tome (or the current thread of a thread isn't provided) and uses `#!luau coroutine.resume` as the destroy method.
+
+The current thread will then yield. Keep in mind, if the main thread is not resumed, you may encounter issues.
+
+This will result in the thread resuming once the Tome is destroyed.
+
+=== "Basic Example"
+	```luau linenums="1" hl_lines="5-5"
+	local newTome: Tome.Tome = Tome.new()
+	
+	newTome:DelayDestroy(2.0)
+	
+	newTome:Yield() -- stops the current thread
+	
+	print("Hello, world!") -- prints after ~2 seconds
 	```
