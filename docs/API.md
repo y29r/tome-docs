@@ -1647,3 +1647,77 @@ This is useful in semi-round systems where you may track players within a sub-ro
 	```
 
 ---
+
+### `#!luau Tome:OnDestroy`
+
+!!! info "Arguments"
+	1. `#!luau callback: (...any) -> ()` &mdash; The callback to add once the Tome destroys.
+	2. `#!luau onDestroyParams: OnDestroyParams` &mdash; The params to mutate how the callback works.
+
+!!! tip "Returns"
+	1. `#!luau cleanUp: () -> ()` &mdash; A clean up function to remove the callback.
+
+Adds a callback function into the Tome that listens for when the Tome gets destroyed. The callback will recieve the same arguments that were passed in `#!luau Tome:Destroy`. This can act as a sort of Signal.
+
+Optionally you can provide OnDestroyParams that affect when and how the callback gets called.
+
+Currently the supported parameters are:
+`Synchronous`: Will call the callback using `task.spawn` instead of directly calling it. This is useful if you know the callback will yield.
+`Deferred`: Will call the callback using `task.defer`. This takes priority over `Synchronous`, but `Synchronous` must be defined as true.
+`RemoveOnDestroy`: Will call the callback, and then remove it from the Tome. In cases like this, it's better to use `#!luau Tome:Add(YOUR_CALLBACK)` which does the same thing, while being more inline with Tome.
+
+!!! note ""
+	By default, `Synchronous` is set to true. This is to prevent hard yielding. If for whatever reason you need the Tome callback thread to yield, you can manually set it to false.
+
+=== "Basic Example"
+	```luau linenums="1" hl_lines="4-6"
+	local newTome: Tome.Tome = Tome.new()
+	
+	newTome:OnDestroy(function()
+		print("Hello, world!")
+	end)
+	
+	newTome:Destroy() --> "Hello, world!"
+	```
+
+=== "Extended Example"
+	```luau linenums="1" hl_lines="4-6"
+	local newTome: Tome.Tome = Tome.new()
+	
+	newTome:OnDestroy(function(myArgument: string)
+		print(myArgument)
+	end)
+	
+	newTome:Destroy("Hello, world!") --> "Hello, world!"
+	```
+
+=== "Extended Example 2"
+	In this example, the callback will be deferred via `!#luau task.defer`.
+	
+	```luau linenums="1" hl_lines="4-6"
+	local newTome: Tome.Tome = Tome.new()
+	
+	newTome:OnDestroy(function(myArgument: string)
+		print(myArgument)
+	end, {
+		Deferred = true,
+	})
+	
+	newTome:Destroy("Hello, world!") --> "Hello, world!" (a tiny bit later)
+	```
+
+=== "Extended Example 3"
+	In this example, nothing happens because the callback was removed after it was called once. Hence the second time we call `#!luau Tome:Destroy`, nothing happens.
+	
+	```luau linenums="1" hl_lines="4-6"
+	local newTome: Tome.Tome = Tome.new()
+	
+	newTome:OnDestroy(function(myArgument: string)
+		print(myArgument)
+	end, {
+		RemoveOnDestroy = true,
+	})
+	
+	newTome:Destroy("Hello, world!") --> "Hello, world!"
+	newTome:Destroy("Hello, world!") --> 
+	```
