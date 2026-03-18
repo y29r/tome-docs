@@ -30,6 +30,32 @@ Creating a Tome is very easy.
 
 ---
 
+## Functions
+Tome uses a single constructor to create a Tome object
+
+### `#!luau Tome.Is`
+
+!!! info "Arguments"
+	1. `#!luau object: any` &mdash; The object to check.
+
+!!! tip "Returns"
+	1. `#!luau isATome: boolean` &mdash; Whether the object is a Tome.
+
+Returns whether the provided object is a Tome object. This function will check against the direct metatable, and `#!luau Tome:BindRenderStepped` method (to track earlier versions)
+
+=== "Basic Example"
+	```luau linenums="1" hl_lines="3-5"
+	local newTome = Tome.new()
+	
+	print("#1 Is this object a Tome? ", Tome.Is({})) -- false
+	print("#2 Is this object a Tome? ", Tome.Is(newTome)) -- true
+	print("#3 Is this object a Tome? ", Tome.Is()) -- false
+	```
+
+---
+
+---
+
 ## Methods
 Tome offers a variety of methods to use on a Tome object
 
