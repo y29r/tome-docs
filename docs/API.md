@@ -14,6 +14,7 @@
 [Instance.fromExisting]: https://create.roblox.com/docs/reference/engine/datatypes/Instance#fromExisting
 [Tome:SetTag]: API.md/#tomesettag
 [RunService:BindToRenderStep]: https://create.roblox.com/docs/reference/engine/classes/RunService#BindToRenderStep
+[RunService]: https://create.roblox.com/docs/reference/engine/classes/RunService
 
 # API
 The official API for Tome giving basic examples for constructors, embedded systems and methods.
@@ -210,6 +211,52 @@ This is usually only used in pair with [Tome:AddFromDictionary]. This is used as
 	}
 	
 	newTome:AddFromDictionary(objects)
+	```
+
+---
+
+### `#!luau Tome.Schedular`
+
+Returns the [Schedular] that Tome is using. This can be (but not recommended) used to modify certain aspects of the [Schedular].
+
+!!! important ""
+	Changing the [Schedular] will affect **everything** not only the environment the change was made in.
+
+#### `#!luau Schedular.startSchedular`
+This starts up the [Schedular] (if it isn't already running) this is usually only called within Tome.
+
+#### `#!luau Schedular.stopSchedular`
+This suspends the [Schedular] in place. Meaning objects that are currently inside will not get destroyed, even if their life time is exceeded.
+
+#### `#!luau Schedular.stepSchedular`
+Steps the [Schedular] forward. This will check the first object within the [Schedular], and if it's ready to be destroyed, then it will be.
+
+#### `#!luau Schedular.isScheduleEmpty`
+A more practical function that returns whether the [Schedular] is empty; whether it has no objects.
+
+#### `#!luau Schedular.isSchedularRunning`
+Returns whether the [Schedular] is currently running.
+
+#### `#!luau Schedular.DefaultSchedularSignalName`
+This determines what [RunService] signal to use for the [Schedular]. The only options are:
+```luau
+"RenderStepped"
+"Heartbeat"
+"PostSimulation"
+"PreAnimation"
+"PreRender"
+"PreSimulation"
+"Stepped"
+```
+
+Every time the signal fires, the [Schedular] will step.
+
+!!! note ""
+	If this variable is changed, the [Schedular] must be reconciled with:
+	```luau
+	Tome.stopSchedular()
+	Tome.DefaultSchedularSignalName = "PreAnimation" -- or your preferred signal kind
+	Tome.startSchedular()
 	```
 
 ---
