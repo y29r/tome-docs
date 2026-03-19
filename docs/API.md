@@ -10,6 +10,7 @@
 [Tome:Remove]: API.md/#tomeremove
 [Tome.schedule]: API.md/#tomeschedule
 [Tome.unschedule]: API.md/#tomeunschedule
+[Tome:BindRenderStepped]: API.md/#tomebindrenderstepped
 [Schedular]: Schedular.md
 [Instance.fromExisting]: https://create.roblox.com/docs/reference/engine/datatypes/Instance#fromExisting
 [Tome:SetTag]: API.md/#tomesettag
@@ -57,7 +58,7 @@ Functions in Tome can be used directly from the module without instantiation.
 !!! tip "Returns"
 	1. `#!luau isATome: boolean` &mdash; Whether the object is a Tome.
 
-Returns whether the provided object is a Tome object. This function will check against the direct metatable, and `#!luau Tome:BindRenderStepped` method (to track earlier versions)
+Returns whether the provided object is a Tome object. This function will check against the direct metatable, and [Tome:BindRenderStepped] method (to track earlier versions)
 
 === "Basic Example"
 	```luau linenums="1" hl_lines="3-5"
@@ -151,7 +152,7 @@ Get access to Tome internals to speed up certain methods manually.
 
 ### `#!luau Tome.FunctionType`
 
-Providing this as a DestroyMethod for methods like `#!luau Tome:Add` can significantly speed up adding functions into the Tome.
+Providing this as a DestroyMethod for methods like [Tome:Add] can significantly speed up adding functions into the Tome.
 
 === "Basic Example"
 	```luau linenums="1" hl_lines="5-5"
@@ -166,7 +167,7 @@ Providing this as a DestroyMethod for methods like `#!luau Tome:Add` can signifi
 
 ### `#!luau Tome.ThreadType`
 
-Providing this as a DestroyMethod for methods like `#!luau Tome:Add` can significantly speed up adding threads into the Tome.
+Providing this as a DestroyMethod for methods like [Tome:Add] can significantly speed up adding threads into the Tome.
 
 === "Basic Example"
 	```luau linenums="1" hl_lines="7-7"
@@ -183,7 +184,7 @@ Providing this as a DestroyMethod for methods like `#!luau Tome:Add` can signifi
 
 ### `#!luau Tome.TweenType`
 
-Providing this as a DestroyMethod for methods like `#!luau Tome:Add` can significantly speed up adding tweens into the Tome.
+Providing this as a DestroyMethod for methods like [Tome:Add] can significantly speed up adding tweens into the Tome.
 
 This DestroyMethod will first call `#!luau Tween:Cancel` and then `#!luau Tween:Destroy`.
 
@@ -217,28 +218,30 @@ This is usually only used in pair with [Tome:AddFromDictionary]. This is used as
 
 ### `#!luau Tome.Schedular`
 
-Returns the [Schedular] that Tome is using. This can be (but not recommended) used to modify certain aspects of the [Schedular].
+Returns the [Schedular] that Tome is using. This can be (but not recommended) used to modify certain aspects of the Schedular.
 
-!!! important ""
-	Changing the [Schedular] will affect **everything** not only the environment the change was made in.
+!!! warning ""
+	The majority of these functions should **not** be called outside debugging purposes. Changes to the Schedular will affect the entire environment, not only the scope that made the changes.
+	
+	At some point an API may be created to allow for multiple schedulars to be created and used within a single scope.
 
 #### `#!luau Schedular.startSchedular`
-This starts up the [Schedular] (if it isn't already running) this is usually only called within Tome.
+This starts up the Schedular (if it isn't already running) this is usually only called within Tome.
 
 #### `#!luau Schedular.stopSchedular`
-This suspends the [Schedular] in place. Meaning objects that are currently inside will not get destroyed, even if their life time is exceeded.
+This suspends the Schedular in place. Meaning objects that are currently inside will not get destroyed, even if their life time is exceeded.
 
 #### `#!luau Schedular.stepSchedular`
-Steps the [Schedular] forward. This will check the first object within the [Schedular], and if it's ready to be destroyed, then it will be.
+Steps the Schedular forward. This will check the first object within the Schedular, and if it's ready to be destroyed, then it will be.
 
 #### `#!luau Schedular.isScheduleEmpty`
-A more practical function that returns whether the [Schedular] is empty; whether it has no objects.
+A more practical function that returns whether the Schedular is empty; whether it has no objects.
 
 #### `#!luau Schedular.isSchedularRunning`
-Returns whether the [Schedular] is currently running.
+Returns whether the Schedular is currently running.
 
 #### `#!luau Schedular.DefaultSchedularSignalName`
-This determines what [RunService] signal to use for the [Schedular]. The only options are:
+This determines what [RunService] signal to use for the Schedular. The only options are:
 ```luau
 "RenderStepped"
 "Heartbeat"
@@ -249,10 +252,10 @@ This determines what [RunService] signal to use for the [Schedular]. The only op
 "Stepped"
 ```
 
-Every time the signal fires, the [Schedular] will step.
+Every time the signal fires, the Schedular will step.
 
 !!! note ""
-	If this variable is changed, the [Schedular] must be reconciled with:
+	If this variable is changed, the Schedular must be reconciled with:
 	```luau
 	Tome.stopSchedular()
 	Tome.DefaultSchedularSignalName = "PreAnimation" -- or your preferred signal kind
