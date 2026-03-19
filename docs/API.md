@@ -1,5 +1,6 @@
 [Tagging]: Tagging.md
 [Metaprops]: Metaprops.md
+[Tween Metadata]: TweenMetadata.md
 [Tome:AddFromDictionary]: API.md/#tomeaddfromdictionary
 [Tome:Attach]: API.md/#tomeattach
 [Tome:Add]: API.md/#tomeadd
@@ -10,6 +11,7 @@
 [Tome:DestroyAllPages]: API.md/#tomedestroyallpages
 [Tome:Contains]: API.md/#tomecontains
 [Tome:Remove]: API.md/#tomeremove
+[Tome:GetPage]: API.md/#tomegetpage
 [Tome.schedule]: API.md/#tomeschedule
 [Tome.unschedule]: API.md/#tomeunschedule
 [Tome:BindRenderStepped]: API.md/#tomebindrenderstepped
@@ -1872,7 +1874,7 @@ Returns the name of the Tome. If the Tome doesn't have a name, nil is returned.
 Removes the Page from the Tome permanently. Destroying itself before being removed.
 
 !!! warning ""
-	If a Page doesn't exist, an error will be thrown. To avoid this, you can call `#!luau Tome:GetPage` before attempting to remove a Page.
+	If a Page doesn't exist, an error will be thrown. To avoid this, you can call [Tome:GetPage] before attempting to remove a Page.
 
 === "Basic Example"
 	```luau linenums="1" hl_lines="4-4"
@@ -1998,7 +2000,7 @@ Manually unbinds the render step RunService binding.
 
 Creates a Tween and adds it into the Tome. This method comes with some extra benefits, such as metadata:
 
-Metadata changes how the tween works. See [Link... once I make it] for more information.
+Metadata changes how the tween works. See [Tween Metadata] for more information.
 
 === "Basic Example"
 	```luau linenums="1" hl_lines="9-9"
