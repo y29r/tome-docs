@@ -4,6 +4,7 @@
 [Tome:Attach]: API.md/#tomeattach
 [Tome:Add]: API.md/#tomeadd
 [Tome:Destroy]: API.md/#tomedestroy
+[Tome:OnDestroy]: API.md/#tomeondestroy
 [Tome:Connect]: API.md/#tomeconnect
 [Tome:DestroyAllObjects]: API.md/#tomedestroyallobjects
 [Tome:DestroyAllPages]: API.md/#tomedestroyallpages
@@ -274,6 +275,119 @@ Returns the version of the Tome being used.
 	local TomeVersion: string = Tome.VERSION
 	
 	print(TomeVersion) --> "v#.#.#.#"
+	```
+
+---
+
+## Metamethods
+Since Tome is a metatable-based library, it comes with some useful metamethods that help with debugging and general use. Some of these can also be found in other libraries, so woo! Extra transition support.
+
+---
+
+### `#!luau Tome.__call`
+
+!!! info "Arguments"
+	1. `#!luau Tuple: ...any` &mdash; The arguments to pass into [Tome:Destroy].
+
+<!-- !!! tip "Returns"
+	1. `#!luau tome: Tome` &mdash; Returns a new Tome object. -->
+
+Destroys the Tome just like [Tome:Destroy]. Will also take in a tuple of arguments to pass into destroy callbacks for [Tome:OnDestroy].
+
+=== "Basic Example"
+	```luau linenums="1" hl_lines="3-3"
+	local newTome: Tome.Tome = Tome.new()
+	
+	newTome() --> destroys the Tome
+	```
+
+---
+
+### `#!luau Tome.__add`
+
+!!! info "Arguments"
+	1. `#!luau object: any` &mdash; The object to add into the Tome.
+
+!!! tip "Returns"
+	1. `#!luau object: object` &mdash; Returns the same object passed in.
+
+Adds in an object just like [Tome:Add] and returns it.
+
+=== "Basic Example"
+	```luau linenums="1" hl_lines="3-3"
+	local newTome: Tome.Tome = Tome.new()
+	
+	local part: BasePart = newTome + workspace.Part
+	```
+	
+---
+
+### `#!luau Tome.__sub`
+
+!!! info "Arguments"
+	1. `#!luau object: any` &mdash; The object to remove from the Tome.
+
+!!! tip "Returns"
+	1. `#!luau object: object` &mdash; Returns the same object passed in.
+
+Removes an object just like [Tome:Remove] and returns it.
+
+=== "Basic Example"
+	```luau linenums="1" hl_lines="5-5"
+	local newTome: Tome.Tome = Tome.new()
+	
+	newTome:Add(workspace.Part)
+	
+	local part: BasePart = newTome - workspace.Part
+	```
+	
+---
+
+### `#!luau Tome.__len`
+
+<!-- !!! info "Arguments"
+	1. `#!luau object: any` &mdash; The object to remove from the Tome. -->
+
+!!! tip "Returns"
+	1. `#!luau objectCount: number` &mdash; The amount of objects.
+
+Returns the amount of objects inside the Tome.
+
+=== "Basic Example"
+	```luau linenums="1" hl_lines="6-6"
+	local newTome: Tome.Tome = Tome.new()
+	
+	newTome:Add(workspace.Part)
+	newTome:Add(workspace.Part2)
+	
+	print(#newTome) --> 2
+	```
+	
+---
+
+### `#!luau Tome.__iter`
+
+<!-- !!! info "Arguments"
+	1. `#!luau object: any` &mdash; The object to remove from the Tome. -->
+
+!!! tip "Returns"
+	1. `#!luau iterator: () -> (any, DestroyMethod)` &mdash; A custom iterator.
+
+Returns a custom iterator to use in `#!luau for x in y do` that will iterate through all the objects within the Tome.
+
+=== "Basic Example"
+	```luau linenums="1" hl_lines="6-8"
+	local newTome: Tome.Tome = Tome.new()
+	
+	newTome:Add(workspace.Part)
+	newTome:Add(workspace.Part2)
+	
+	for object: BasePart, destroyMethod: Tome.DestroyMethod in newTome do
+		print(object, destroyMethod)
+	end
+	
+	--> "Part", "Destroy"
+	--> "Part2", "Destroy"
 	```
 
 ---
