@@ -1833,15 +1833,30 @@ Removes all objects from the Tome that are of the specified type.
 Renames the Tome internally. This is usually used for debugging. But can be used for other purposes too.
 
 === "Basic Example"
+	```luau linenums="1" hl_lines="3-3"
+	local newTome: Tome.Tome = Tome.new()
+	newTome:Rename("Test")
+	
+	print(newTome:GetName()) --> "Test"
+	```
+	
+---
+
+### `#!luau Tome:GetName`
+
+!!! tip "Returns"
+	1. `#!luau name: string?` &mdash; The name of the Tome.
+
+Returns the name of the Tome. If the Tome doesn't have a name, nil is returned.
+
+=== "Basic Example"
 	```luau linenums="1" hl_lines="6-6"
 	local newTome: Tome.Tome = Tome.new()
 	
 	local newPage: Tome.Tome = newTome:AddPage("Test")
-	print(newTome) --> {pages = {["Test"] = {...}}}
-	
 	newPage:Rename("Test")
 	
-	print(newTome) --> {pages = {["Test2"] = {...}}}
+	print(newPage:GetName()) --> "Test"
 	```
 
 ---
