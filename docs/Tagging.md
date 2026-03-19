@@ -11,7 +11,18 @@ Tagging is a term used in Tome to refer to automatically disposing of Instances 
 ## How does it work?
 Tags are useful in the sense that once an Instance gets a tag, and later down that same Instance gets destroyed by most methods e.g. `#!luau Instance:Destroy`, `#!luau Instance:Remove` and `#!luau Instance.Parent = nil`.
 
-Then the [CollectionService:GetInstanceRemovedSignal] will pick up on the object being destroyed, which from there the Tome can dispose of it from its own objects dictionary.
+Traditionally you would check if an object was destroyed with:
+```luau
+local part: BasePart = workspace.Part
+
+part.Destroying:Once(function()
+	print("destroyed")
+end)
+```
+
+However the only time this Signal gets fired is when `#!luau object:Destroy` is called. And sometimes other libraries, or older code may not behave that way. Moreover, creating a connection for checking every Instance can become expensive, and can build up more technial debt with more complex systems.
+
+[CollectionService:GetInstanceRemovedSignal] will pick up on the object being destroyed, which from there the Tome can dispose of it from its own objects dictionary.
 
 ---
 

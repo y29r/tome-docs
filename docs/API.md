@@ -1,4 +1,5 @@
 [Tagging]: Tagging.md
+[Metaprops]: Metaprops.md
 [Tome:AddFromDictionary]: API.md/#tomeaddfromdictionary
 [Tome:Attach]: API.md/#tomeattach
 [Tome:Add]: API.md/#tomeadd
@@ -28,7 +29,7 @@ Tome uses a single constructor to create a Tome object
 ### `#!luau Tome.new`
 
 !!! info "Arguments"
-	1. `#!luau metaprops: Metaprops?` &mdash; The metaprops object to use when instantiating the Tome.
+	1. `#!luau metaprops: Metaprops?` &mdash; The [Metaprops] object to use when instantiating the Tome.
 
 !!! tip "Returns"
 	1. `#!luau tome: Tome` &mdash; Returns a new Tome object.
@@ -466,7 +467,7 @@ newTome:Destroy() -- now when the Tome is destroyed, the Promise above will get 
 
 !!! info "Arguments"
 	1. `#!luau name: string?` &mdash; Providing a name will open up the ability to use other methods such as `#!luau Tome:GetPage`. Internally helps with debugging as well.
-	2. `#!luau metaprops: Metaprops?` &mdash; Providing metaprops will apply them to the new Page when constructing.
+	2. `#!luau metaprops: Metaprops?` &mdash; Providing [Metaprops] will apply them to the new Page when constructing.
 
 !!! tip "Returns"
 	1. `#!luau page: Tome` &mdash; Returns a new Page (Tome)
