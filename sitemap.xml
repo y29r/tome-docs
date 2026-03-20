@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+    <url>
+         <loc>https://sitename.example/</loc>
+         <lastmod>2026-03-20</lastmod>
+    </url>
+    <url>
+         <loc>https://sitename.example/API/</loc>
+         <lastmod>2026-03-20</lastmod>
+    </url>
+    <url>
+         <loc>https://sitename.example/DestroyMethods/</loc>
+         <lastmod>2026-03-20</lastmod>
+    </url>
+    <url>
+         <loc>https://sitename.example/Metaprops/</loc>
+         <lastmod>2026-03-20</lastmod>
+    </url>
+    <url>
+         <loc>https://sitename.example/Scheduler/</loc>
+         <lastmod>2026-03-20</lastmod>
+    </url>
+    <url>
+         <loc>https://sitename.example/Static/</loc>
+         <lastmod>2026-03-20</lastmod>
+    </url>
+    <url>
+         <loc>https://sitename.example/Tagging/</loc>
+         <lastmod>2026-03-20</lastmod>
+    </url>
+    <url>
+         <loc>https://sitename.example/TweenMetadata/</loc>
+         <lastmod>2026-03-20</lastmod>
+    </url>
+</urlset>
